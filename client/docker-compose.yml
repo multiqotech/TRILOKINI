@@ -1,0 +1,29 @@
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextjs-figma
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - nextjs_node_modules:/app/node_modules
+      - nextjs_next:/app/.next
+    environment:
+      WATCHPACK_POLLING: "true"
+    command: >
+      sh -c "if [ ! -f package.json ]; then
+      rm -rf /tmp/next-app;
+      npx --yes create-next-app@latest /tmp/next-app --yes --ts --eslint --tailwind --no-react-compiler --app --src-dir --use-npm --import-alias '@/*';
+      cp -a /tmp/next-app/. /app/;
+      rm -rf /tmp/next-app;
+      fi;
+      npm run dev -- --hostname 0.0.0.0"
+    stdin_open: false
+    tty: false
+
+volumes:
+  nextjs_node_modules:
+  nextjs_next:

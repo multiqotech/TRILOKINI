@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --trilokini-white: #ffffff;
+  --trilokini-black: #000000;
+  --trilokini-gray: #757575;
+  --trilokini-gray-light: #c2c2c2;
+  --trilokini-sale: #e32a2a;
+  --trilokini-action: #c80000;
+  --trilokini-footer-wash: rgba(234, 234, 234, 0.67);
+  --space-page: 24px;
+  --space-mobile: 5px;
+  --space-section: 48px;
+  --space-grid: 16px;
+  --text-xs: 9px;
+  --text-sm: 12px;
+  --text-body: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-display: 30px;
+  --tracking-tight: 0.36px;
+  --tracking-body: 0.56px;
+  --tracking-wide: 0.65px;
+  --tracking-display: 0.72px;
+  --background: var(--trilokini-white);
+  --foreground: var(--trilokini-black);
+}
+
+@theme inline {
+  --color-background: var(--trilokini-white);
+  --color-foreground: var(--trilokini-black);
+  --color-gray: var(--trilokini-gray);
+  --color-gray-light: var(--trilokini-gray-light);
+  --color-sale: var(--trilokini-sale);
+  --color-action: var(--trilokini-action);
+  --color-footer-wash: var(--trilokini-footer-wash);
+  --font-sans: var(--font-plus-jakarta);
+  --font-display: var(--font-crimson-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--trilokini-white);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-plus-jakarta), sans-serif;
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
