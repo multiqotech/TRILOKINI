@@ -70,6 +70,15 @@ export default function CategoriesPage() {
         </span>
       )
     },
+    {
+      key: "bulkShow",
+      label: "Bulk Show",
+      render: (val) => (
+        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${val ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700'}`}>
+          {val ? 'Yes' : 'No'}
+        </span>
+      )
+    },
     { key: "homePageOrder", label: "Order" }
   ];
 
@@ -78,6 +87,7 @@ export default function CategoriesPage() {
     { name: "description", label: "Description", type: "textarea" },
     { name: "imageUrl", label: "Category Image", type: "image", required: true, aspectRatio: 4/5 },
     { name: "showInHomePage", label: "Show in Homepage", type: "toggle" },
+    { name: "bulkShow", label: "Bulk Show (Show all items on Homepage)", type: "toggle" },
     { name: "homePageOrder", label: "Home Page Order", type: "number" }
   ];
 

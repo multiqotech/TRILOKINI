@@ -14,6 +14,7 @@ export type HomePageData = {
   celebrities: Celebrity[];
   weddingItems: WeddingItem[];
   favourites: FavouriteItem[];
+  bulkShowProducts: HomepageProductGroup[];
 };
 
 function resolveImage(url?: string): string {
@@ -254,10 +255,14 @@ function HomeContent({ data }: { data: HomePageData }) {
         
         <FavouritesSection favourites={data?.favourites} />
         
-        <section className="space-y-5">
-          <SectionHeading title="TOP SELLING PRODUCTS" />
-          <ProductCarousel products={staticProducts} hideFavorite={true} />
-        </section>
+        {data?.bulkShowProducts && data.bulkShowProducts.length > 0 && (
+          data.bulkShowProducts.map((group, index) => (
+            <section key={`bulk-${group.category?._id || index}`} className="space-y-5">
+              <SectionHeading title={group.category?.title || "PRODUCTS"} />
+              <ProductCarousel products={group.products.map(toClientProduct)} hideFavorite={true} />
+            </section>
+          ))
+        )}
         
         <section className="space-y-5">
           <SectionHeading title="CUSTOM LAYOUT" />

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { AddToCartButton, IconButton, SizeSelector, ColorSelector } from "./ui";
 
 import { Heart } from "lucide-react";
@@ -17,21 +17,42 @@ export function ProductGrid({ products }: { products: Product[] }) {
 }
 
 export function ProductCarousel({ products, title, hideFavorite }: { products: Product[]; title?: string; hideFavorite?: boolean }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -scrollRef.current.offsetWidth, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: scrollRef.current.offsetWidth, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative">
-      {title ? <h2 className="mb-5 text-[18px] font-semibold tracking-[0.72px]">{title}</h2> : null}
+      {title ? (
+        <div className="mb-5 flex items-center justify-between px-[5px] lg:px-12">
+          <h2 className="text-[18px] font-semibold tracking-[0.72px] uppercase">{title}</h2>
+          <button type="button" className="text-[13px] font-medium underline underline-offset-4 hover:text-gray-600 transition-colors">
+            VIEW ALL
+          </button>
+        </div>
+      ) : null}
       <div className="relative group px-[5px] lg:px-12">
-        <button className="absolute left-0 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors">
+        <button onClick={scrollLeft} className="absolute left-3 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors bg-white/80 shadow-sm border border-gray-100">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
-        <div className="flex snap-x snap-mandatory gap-3 lg:gap-4 overflow-x-auto pb-4 scrollbar-hide">
+        <div ref={scrollRef} className="flex snap-x snap-mandatory gap-3 lg:gap-4 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {products.map((product) => (
             <div key={product.id} className="w-[140px] min-w-[140px] snap-start lg:w-[calc(20%-13px)] lg:min-w-[calc(20%-13px)]">
               <ProductCard product={product} hideFavorite={hideFavorite} />
             </div>
           ))}
         </div>
-        <button className="absolute right-0 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors">
+        <button onClick={scrollRight} className="absolute right-3 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors bg-white/80 shadow-sm border border-gray-100">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
         </button>
       </div>

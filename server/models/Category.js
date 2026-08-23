@@ -20,6 +20,14 @@ const categorySchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  bulkShow: {
+    type: Boolean,
+    default: false,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
   order: {
     type: Number,
     default: 0,
