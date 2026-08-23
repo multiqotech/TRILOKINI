@@ -74,18 +74,28 @@ export default function FavouritesPage() {
     { key: "order", label: "Order" }
   ];
 
-  const positionOptions = [
-    { label: "Top Left", value: "top_left" },
-    { label: "Top Right", value: "top_right" },
-    { label: "Bottom Left", value: "bottom_left" },
-    { label: "Bottom Right", value: "bottom_right" },
-    { label: "Center", value: "center" }
-  ];
-
   const formFields = [
     { name: "imageUrl", label: "Image URL", type: "image", required: true },
     { name: "href", label: "Link URL", type: "text" },
-    { name: "position", label: "Position", type: "select", options: positionOptions, required: true },
+    { 
+      name: "position", 
+      label: "Position", 
+      type: "select", 
+      options: [
+        { label: "Left Large 1 (16:9)", value: "left_large_1" },
+        { label: "Left Small 1 (4:5)", value: "left_small_1" },
+        { label: "Left Small 2 (4:5)", value: "left_small_2" },
+        { label: "Left Large 2 (16:9)", value: "left_large_2" },
+        { label: "Left Small 3 (4:5)", value: "left_small_3" },
+        { label: "Left Small 4 (4:5)", value: "left_small_4" },
+        { label: "Right Tall (Flexible)", value: "right_tall" },
+        { label: "Right Small 1 (4:5)", value: "right_small_1" },
+        { label: "Right Small 2 (4:5)", value: "right_small_2" },
+        { label: "Right Large 1 (16:9)", value: "right_large_1" },
+        { label: "Mobile Banner (1:1)", value: "mobile" }
+      ], 
+      required: true 
+    },
     { name: "order", label: "Order", type: "number" },
     { name: "isActive", label: "Is Active", type: "toggle" }
   ];

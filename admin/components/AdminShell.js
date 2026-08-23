@@ -20,7 +20,7 @@ import { useState } from "react";
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
-  { name: "Hero Banners", href: "/hero-banners", icon: ImageIcon },
+  // { name: "Hero Banners", href: "/hero-banners", icon: ImageIcon },
   { name: "Categories", href: "/categories", icon: Box },
   { name: "Products", href: "/products", icon: ShoppingBag },
   { name: "Designers", href: "/designers", icon: Users },

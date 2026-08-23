@@ -245,10 +245,12 @@ function HomeContent({ data }: { data: HomePageData }) {
         <CelebritySection celebrities={data?.celebrities} />
         <WeddingSection weddingItems={data?.weddingItems} />
         
+        {/* 
         <section className="space-y-5">
           <SectionHeading title="TOP SELLING PRODUCTS" />
           <ProductCarousel products={staticProducts} hideFavorite={true} />
         </section>
+        */}
         
         <FavouritesSection favourites={data?.favourites} />
         

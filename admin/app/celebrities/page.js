@@ -76,7 +76,7 @@ export default function CelebritiesPage() {
 
   const formFields = [
     { name: "name", label: "Name", type: "text", required: true },
-    { name: "imageUrl", label: "Image URL", type: "image", required: true },
+    { name: "imageUrl", label: "Image URL", type: "image", required: true, aspectRatio: 2/3 },
     { name: "subtitle", label: "Subtitle", type: "text" },
     { name: "profileUrl", label: "Profile Link", type: "text" },
     { name: "order", label: "Order", type: "number" },

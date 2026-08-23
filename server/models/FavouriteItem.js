@@ -11,7 +11,7 @@ const favouriteItemSchema = new mongoose.Schema({
   },
   position: {
     type: String,
-    enum: ['left-wide-1', 'left-square-1', 'left-square-2', 'left-wide-2', 'left-square-3', 'left-square-4', 'right-tall', 'right-square-1', 'right-square-2', 'right-wide'],
+    enum: ['left_large_1', 'left_small_1', 'left_small_2', 'left_large_2', 'left_small_3', 'left_small_4', 'right_tall', 'right_small_1', 'right_small_2', 'right_large_1', 'mobile'],
     required: true,
   },
   order: {

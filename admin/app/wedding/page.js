@@ -81,7 +81,7 @@ export default function WeddingPage() {
 
   const formFields = [
     { name: "name", label: "Name", type: "text", required: true },
-    { name: "imageUrl", label: "Image URL", type: "image", required: true },
+    { name: "imageUrl", label: "Image URL", type: "image", aspectRatio: 2/3, required: true },
     { name: "subtitle", label: "Subtitle", type: "text" },
     { name: "href", label: "Link URL", type: "text" },
     { name: "order", label: "Order", type: "number" },

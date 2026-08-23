@@ -92,7 +92,7 @@ export default function ProductsPage() {
     { name: "currentPrice", label: "Current Price (₹)", type: "number", required: true },
     { name: "previousPrice", label: "Previous Price (₹)", type: "number" },
     { name: "discountPercentage", label: "Discount Percentage", type: "number" },
-    { name: "imageUrl", label: "Product Image", type: "image" },
+    { name: "imageUrl", label: "Product Image", type: "image", aspectRatio: 2/3 },
     { name: "designerName", label: "Designer Name", type: "text" },
     { name: "showInHomePage", label: "Show in Homepage", type: "toggle" },
     { name: "homePageOrder", label: "Home Page Order", type: "number" }

@@ -76,9 +76,9 @@ export default function DesignersPage() {
 
   const formFields = [
     { name: "name", label: "Name", type: "text", required: true },
-    { name: "imageUrl", label: "Image URL", type: "image" },
     { name: "subtitle", label: "Subtitle", type: "text" },
-    { name: "profileUrl", label: "Profile Link", type: "text" },
+    { name: "imageUrl", label: "Designer Image", type: "image", aspectRatio: 4/5 },
+    { name: "showInHomePage", label: "Show in Homepage", type: "toggle" },
     { name: "order", label: "Order", type: "number" },
     { name: "isActive", label: "Is Active", type: "toggle" }
   ];

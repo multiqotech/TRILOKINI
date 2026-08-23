@@ -10,7 +10,7 @@ export default function ImageUpload({ value, onChange, aspectRatio }) {
   const [imageToCrop, setImageToCrop] = useState(null);
   const [originalFile, setOriginalFile] = useState(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -19,6 +19,7 @@ export default function ImageUpload({ value, onChange, aspectRatio }) {
       return;
     }
 
+    /* --- CROPPER COMMENTED OUT FOR NOW ---
     // Instead of uploading immediately, read it for the cropper
     setError('');
     setOriginalFile(file);
@@ -29,6 +30,20 @@ export default function ImageUpload({ value, onChange, aspectRatio }) {
     reader.readAsDataURL(file);
     // Reset input so the same file can be selected again if canceled
     e.target.value = null;
+    */
+
+    // Direct upload
+    try {
+      setIsUploading(true);
+      setError('');
+      const data = await uploadImage(file);
+      onChange(data.url || data.imageUrl);
+    } catch (err) {
+      setError('Failed to upload image');
+      console.error(err);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleCropCancel = () => {
