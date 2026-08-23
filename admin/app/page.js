@@ -1,74 +1,130 @@
+"use client";
+import { useState, useEffect } from "react";
+import StatCard from "../components/StatCard";
+import { Box, ShoppingBag, Users, Image as ImageIcon, ArrowRight, Activity, TrendingUp, DollarSign, ListOrdered } from "lucide-react";
+import Link from "next/link";
+import { getCategories, getProducts, getDesigners, getHeroBanners } from "../api";
+
 export default function AdminHome() {
+  const [stats, setStats] = useState({
+    products: 0,
+    categories: 0,
+    designers: 0,
+    banners: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [prodRes, catRes, desRes, banRes] = await Promise.all([
+          getProducts().catch(() => ({ data: [] })),
+          getCategories().catch(() => ({ data: [] })),
+          getDesigners().catch(() => ({ data: [] })),
+          getHeroBanners().catch(() => ({ data: [] }))
+        ]);
+        
+        setStats({
+          products: prodRes.data?.length || 0,
+          categories: catRes.data?.length || 0,
+          designers: desRes.data?.length || 0,
+          banners: banRes.data?.length || 0,
+        });
+      } catch (error) {
+        console.error("Failed to fetch stats", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchStats();
+  }, []);
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {/* Stats Cards */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500 font-medium">Total Products</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">1,245</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500 font-medium">Active Categories</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">18</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <p className="text-sm text-gray-500 font-medium">Designers</p>
-          <p className="text-3xl font-bold text-gray-800 mt-2">42</p>
-        </div>
+      {/* Stat Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard 
+          title="Total Products" 
+          value={loading ? "..." : stats.products} 
+          icon={ShoppingBag} 
+          subtitle="Live data"
+        />
+        <StatCard 
+          title="Active Categories" 
+          value={loading ? "..." : stats.categories} 
+          icon={Box} 
+          subtitle="56% of total"
+        />
+        <StatCard 
+          title="Total Revenue" 
+          value="₹0" 
+          icon={DollarSign} 
+          subtitle="No payments yet"
+        />
+        <StatCard 
+          title="Total Profit" 
+          value="₹0" 
+          icon={TrendingUp} 
+          subtitle="No data"
+        />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="bg-[#7b2c2c] text-white p-4 rounded-lg font-medium hover:bg-[#561a1a] transition-colors text-left">
-            + Create New Category
-          </button>
-          <button className="bg-gray-800 text-white p-4 rounded-lg font-medium hover:bg-gray-900 transition-colors text-left">
-            + Add New Product
-          </button>
-          <button className="bg-white border border-gray-300 text-gray-700 p-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-left">
-            Update Hero Banners
-          </button>
+      {/* Panels Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+        
+        {/* Left Panel (Quick Actions styled as dark card) */}
+        <div 
+          className="rounded-2xl p-6"
+          style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', minHeight: '380px' }}
+        >
+          <div className="flex items-center gap-2 mb-8">
+            <Activity size={20} style={{ color: 'var(--primary-teal)' }} />
+            <h3 style={{ color: 'white', fontSize: '18px', fontWeight: '500' }}>Quick Actions</h3>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { title: "Manage Products", icon: ShoppingBag, href: "/products" },
+              { title: "Manage Categories", icon: Box, href: "/categories" },
+              { title: "Update Banners", icon: ImageIcon, href: "/hero-banners" },
+              { title: "Manage Designers", icon: Users, href: "/designers" }
+            ].map((action, i) => (
+              <Link 
+                key={i} 
+                href={action.href}
+                className="group flex items-center justify-between p-4 rounded-xl transition-all"
+                style={{ background: '#0f0f0f', border: '1px solid var(--border-color)' }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary-teal)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-color)'}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg" style={{ background: 'rgba(0, 180, 216, 0.1)' }}>
+                    <action.icon size={18} style={{ color: 'var(--primary-teal)' }} />
+                  </div>
+                  <span style={{ color: 'white', fontWeight: '500' }}>{action.title}</span>
+                </div>
+                <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
-      
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
-        <div className="p-6 border-b">
-          <h3 className="text-lg font-semibold text-gray-800">Dynamic Section Configuration</h3>
-          <p className="text-sm text-gray-500">Manage which sections appear on the home page.</p>
+
+        {/* Right Panel (Recent Activity styled as dark card) */}
+        <div 
+          className="rounded-2xl p-6 flex flex-col items-center justify-center"
+          style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', minHeight: '380px' }}
+        >
+          <div className="w-full flex items-center gap-2 mb-8 self-start">
+            <ListOrdered size={20} style={{ color: 'var(--primary-teal)' }} />
+            <h3 style={{ color: 'white', fontSize: '18px', fontWeight: '500' }}>Recent Activity</h3>
+          </div>
+          
+          <div className="flex-1 flex items-center justify-center w-full">
+            <p style={{ color: 'var(--text-muted)' }}>No recent activity data available</p>
+          </div>
         </div>
-        <div className="p-0">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-50 text-gray-600">
-              <tr>
-                <th className="px-6 py-3 font-medium">Section Name</th>
-                <th className="px-6 py-3 font-medium">Type</th>
-                <th className="px-6 py-3 font-medium">Status</th>
-                <th className="px-6 py-3 font-medium">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              <tr>
-                <td className="px-6 py-4">Main Hero</td>
-                <td className="px-6 py-4">Image Banner</td>
-                <td className="px-6 py-4"><span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Visible</span></td>
-                <td className="px-6 py-4"><button className="text-blue-600 hover:underline">Edit</button></td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4">New Arrivals</td>
-                <td className="px-6 py-4">Product Category</td>
-                <td className="px-6 py-4"><span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Visible</span></td>
-                <td className="px-6 py-4"><button className="text-blue-600 hover:underline">Edit</button></td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4">Celebrity Closet</td>
-                <td className="px-6 py-4">Carousel</td>
-                <td className="px-6 py-4"><span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-medium">Hidden</span></td>
-                <td className="px-6 py-4"><button className="text-blue-600 hover:underline">Edit</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        
       </div>
     </div>
   );

@@ -1,38 +1,34 @@
 const Category = require('../models/Category');
+const createCrudController = require('../utils/crudFactory');
 const { getRedisClient } = require('../config/redis');
 
-// Get all categories
-exports.getCategories = async (req, res) => {
+const crud = createCrudController(Category, 'categories');
+
+const getHomepageCategories = async (req, res) => {
   try {
     const redisClient = getRedisClient();
-    const cachedCategories = await redisClient.get('categories');
+    const cacheKey = 'categories:homepage';
     
-    if (cachedCategories) {
-      return res.json(JSON.parse(cachedCategories));
+    if (redisClient) {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      }
     }
-
-    const categories = await Category.find().sort({ order: 1 });
-    await redisClient.setEx('categories', 3600, JSON.stringify(categories)); // Cache for 1 hour
     
-    res.json(categories);
+    const categories = await Category.find({ showInHomePage: true }).sort({ homePageOrder: 1 });
+    
+    if (redisClient) {
+      await redisClient.setEx(cacheKey, 3600, JSON.stringify(categories));
+    }
+    
+    res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Create new category
-exports.createCategory = async (req, res) => {
-  try {
-    const { title, showInHomePage, order } = req.body;
-    const category = new Category({ title, showInHomePage, order });
-    const savedCategory = await category.save();
-    
-    // Invalidate cache
-    const redisClient = getRedisClient();
-    await redisClient.del('categories');
-    
-    res.status(201).json(savedCategory);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+module.exports = {
+  ...crud,
+  getHomepageCategories,
 };

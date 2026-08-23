@@ -1,48 +1,82 @@
 const Product = require('../models/Product');
+const createCrudController = require('../utils/crudFactory');
 const { getRedisClient } = require('../config/redis');
 
-// Get all products (with optional category filter)
-exports.getProducts = async (req, res) => {
+const crud = createCrudController(Product, 'products');
+
+const getHomepageProducts = async (req, res) => {
   try {
-    const { categoryId } = req.query;
-    let query = {};
-    let cacheKey = 'products:all';
-    
-    if (categoryId) {
-      query.category = categoryId;
-      cacheKey = `products:category:${categoryId}`;
-    }
-
     const redisClient = getRedisClient();
-    const cachedProducts = await redisClient.get(cacheKey);
+    const cacheKey = 'products:homepage';
     
-    if (cachedProducts) {
-      return res.json(JSON.parse(cachedProducts));
+    if (redisClient) {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      }
     }
-
-    const products = await Product.find(query).populate('category', 'title showInHomePage');
-    await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
     
-    res.json(products);
+    const products = await Product.find({ showInHomePage: true, isActive: true })
+      .populate('category', 'title showInHomePage')
+      .sort({ homePageOrder: 1 });
+      
+    // Group by category, top 5 per category
+    const grouped = products.reduce((acc, curr) => {
+      const categoryId = curr.category?._id?.toString();
+      if (!categoryId) return acc;
+      
+      if (!acc[categoryId]) {
+        acc[categoryId] = {
+          category: curr.category,
+          products: []
+        };
+      }
+      
+      if (acc[categoryId].products.length < 5) {
+        acc[categoryId].products.push(curr);
+      }
+      return acc;
+    }, {});
+    
+    const result = Object.values(grouped);
+    
+    if (redisClient) {
+      await redisClient.setEx(cacheKey, 3600, JSON.stringify(result));
+    }
+    
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// Create new product
-exports.createProduct = async (req, res) => {
+const getByCategory = async (req, res) => {
   try {
-    const productData = req.body;
-    const product = new Product(productData);
-    const savedProduct = await product.save();
-    
-    // Invalidate cache
+    const { categoryId } = req.params;
     const redisClient = getRedisClient();
-    await redisClient.del('products:all');
-    await redisClient.del(`products:category:${productData.category}`);
+    const cacheKey = `products:category:${categoryId}`;
     
-    res.status(201).json(savedProduct);
+    if (redisClient) {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return res.status(200).json(JSON.parse(cachedData));
+      }
+    }
+    
+    const products = await Product.find({ category: categoryId }).populate('category', 'title showInHomePage');
+    
+    if (redisClient) {
+      await redisClient.setEx(cacheKey, 3600, JSON.stringify(products));
+    }
+    
+    res.status(200).json(products);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
+};
+
+module.exports = {
+  ...crud,
+  getHomepageProducts,
+  getByCategory,
 };

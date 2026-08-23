@@ -13,9 +13,17 @@ const designerSchema = new mongoose.Schema({
   profileUrl: {
     type: String,
   },
+  subtitle: {
+    type: String,
+    default: 'SHOP NOW',
+  },
   order: {
     type: Number,
     default: 0,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
   }
 }, { timestamps: true });
 

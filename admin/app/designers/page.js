@@ -1,15 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getCategories, createCategory, updateCategory, deleteCategory } from "../../api";
+import { getDesigners, createDesigner, updateDesigner, deleteDesigner } from "../../api";
 import { resolveImage } from "../../utils";
 import DataTable from "../../components/DataTable";
 import FormModal from "../../components/FormModal";
 import { Plus } from "lucide-react";
 
-export default function CategoriesPage() {
-  const [categories, setCategories] = useState([]);
+export default function DesignersPage() {
+  const [designers, setDesigners] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null);
+  const [editingDesigner, setEditingDesigner] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -17,22 +17,22 @@ export default function CategoriesPage() {
 
   const fetchData = async () => {
     try {
-      const res = await getCategories();
-      setCategories(res.data || []);
+      const res = await getDesigners();
+      setDesigners(res.data || []);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleOpenModal = (category = null) => {
-    setEditingCategory(category);
+  const handleOpenModal = (designer = null) => {
+    setEditingDesigner(designer);
     setIsModalOpen(true);
   };
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (confirm("Are you sure you want to delete this designer?")) {
       try {
-        await deleteCategory(id);
+        await deleteDesigner(id);
         fetchData();
       } catch (error) {
         console.error(error);
@@ -42,10 +42,10 @@ export default function CategoriesPage() {
 
   const handleSubmit = async (data) => {
     try {
-      if (editingCategory) {
-        await updateCategory(editingCategory._id, data);
+      if (editingDesigner) {
+        await updateDesigner(editingDesigner._id, data);
       } else {
-        await createCategory(data);
+        await createDesigner(data);
       }
       setIsModalOpen(false);
       fetchData();
@@ -58,45 +58,47 @@ export default function CategoriesPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Category" className="w-12 h-12 rounded object-cover" /> : <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val) => val ? <img src={resolveImage(val)} alt="Designer" className="w-12 h-12 rounded-full object-cover" /> : <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
-    { key: "title", label: "Title" },
+    { key: "name", label: "Name" },
+    { key: "subtitle", label: "Subtitle" },
+    { key: "order", label: "Order" },
     {
-      key: "showInHomePage",
-      label: "Home Page",
+      key: "isActive",
+      label: "Active",
       render: (val) => (
         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${val ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
           {val ? 'Yes' : 'No'}
         </span>
       )
-    },
-    { key: "homePageOrder", label: "Order" }
+    }
   ];
 
   const formFields = [
-    { name: "title", label: "Title", type: "text", required: true },
-    { name: "description", label: "Description", type: "textarea" },
-    { name: "imageUrl", label: "Category Image", type: "image", required: true, aspectRatio: 4/5 },
-    { name: "showInHomePage", label: "Show in Homepage", type: "toggle" },
-    { name: "homePageOrder", label: "Home Page Order", type: "number" }
+    { name: "name", label: "Name", type: "text", required: true },
+    { name: "imageUrl", label: "Image URL", type: "image" },
+    { name: "subtitle", label: "Subtitle", type: "text" },
+    { name: "profileUrl", label: "Profile Link", type: "text" },
+    { name: "order", label: "Order", type: "number" },
+    { name: "isActive", label: "Is Active", type: "toggle" }
   ];
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-800">Categories</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Designers</h2>
         <button 
           onClick={() => handleOpenModal()}
           className="bg-[#4361ee] hover:bg-blue-700 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-colors shadow-sm"
         >
           <Plus size={20} />
-          <span>Add Category</span>
+          <span>Add Designer</span>
         </button>
       </div>
       
       <DataTable 
         columns={columns} 
-        data={categories} 
+        data={designers} 
         onEdit={handleOpenModal} 
         onDelete={handleDelete} 
       />
@@ -104,9 +106,9 @@ export default function CategoriesPage() {
       <FormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingCategory ? "Edit Category" : "Add Category"}
+        title={editingDesigner ? "Edit Designer" : "Add Designer"}
         fields={formFields}
-        initialData={editingCategory}
+        initialData={editingDesigner}
         onSubmit={handleSubmit}
       />
     </div>

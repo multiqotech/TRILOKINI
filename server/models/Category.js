@@ -6,9 +6,19 @@ const categorySchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  description: {
+    type: String,
+  },
+  imageUrl: {
+    type: String,
+  },
   showInHomePage: {
     type: Boolean,
     default: false,
+  },
+  homePageOrder: {
+    type: Number,
+    default: 0,
   },
   order: {
     type: Number,

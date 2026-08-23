@@ -1,27 +1,21 @@
 const mongoose = require('mongoose');
 
-const heroBannerSchema = new mongoose.Schema({
-  title: {
+const celebritySchema = new mongoose.Schema({
+  name: {
     type: String,
+    required: true,
     trim: true,
   },
   imageUrl: {
     type: String,
     required: true,
   },
-  mobileImageUrl: {
+  subtitle: {
     type: String,
+    default: 'SHOP NOW',
   },
-  linkUrl: {
+  profileUrl: {
     type: String,
-  },
-  section: {
-    type: String, // 'main', 'part2', 'wedding', etc.
-    required: true,
-  },
-  buttonText: {
-    type: String,
-    default: 'Shop Now',
   },
   order: {
     type: Number,
@@ -33,4 +27,4 @@ const heroBannerSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('HeroBanner', heroBannerSchema);
+module.exports = mongoose.model('Celebrity', celebritySchema);

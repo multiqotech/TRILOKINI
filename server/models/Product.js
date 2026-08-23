@@ -30,15 +30,26 @@ const productSchema = new mongoose.Schema({
   },
   designerName: {
     type: String,
+  },
+  showInHomePage: {
+    type: Boolean,
+    default: false,
+  },
+  homePageOrder: {
+    type: Number,
+    default: 0,
+  },
+  isActive: {
+    type: Boolean,
+    default: true,
   }
 }, { timestamps: true });
 
 // Pre-save hook to calculate discount if both prices exist
-productSchema.pre('save', function(next) {
+productSchema.pre('save', function() {
   if (this.previousPrice && this.currentPrice && this.previousPrice > this.currentPrice) {
     this.discountPercentage = Math.round(((this.previousPrice - this.currentPrice) / this.previousPrice) * 100);
   }
-  next();
 });
 
 module.exports = mongoose.model('Product', productSchema);
