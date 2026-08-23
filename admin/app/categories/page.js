@@ -58,7 +58,7 @@ export default function CategoriesPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Category" className="w-12 h-12 rounded object-cover" /> : <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val) => val ? <img src={resolveImage(val)} alt="Category" className="w-12 h-12 rounded object-cover object-top" /> : <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
     { key: "title", label: "Title" },
     {

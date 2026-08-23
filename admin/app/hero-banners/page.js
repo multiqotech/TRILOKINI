@@ -95,7 +95,7 @@ export default function HeroBannersPage() {
     {
       key: "imageUrl",
       label: "Desktop Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Desktop Banner" className="w-20 h-10 rounded object-cover" /> : '-'
+      render: (val) => val ? <img src={resolveImage(val)} alt="Desktop Banner" className="w-20 h-10 rounded object-cover object-top" /> : '-'
     },
     { key: "linkUrl", label: "Link URL" }
   ];

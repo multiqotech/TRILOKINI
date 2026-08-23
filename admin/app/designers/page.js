@@ -58,7 +58,7 @@ export default function DesignersPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Designer" className="w-12 h-12 rounded-full object-cover" /> : <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val) => val ? <img src={resolveImage(val)} alt="Designer" className="w-12 h-12 rounded-full object-cover object-top" /> : <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
     { key: "name", label: "Name" },
     { key: "subtitle", label: "Subtitle" },

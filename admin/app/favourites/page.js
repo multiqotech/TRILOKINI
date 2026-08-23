@@ -58,7 +58,7 @@ export default function FavouritesPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Favourite Item" className="w-20 h-16 rounded object-cover" /> : <div className="w-20 h-16 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val) => val ? <img src={resolveImage(val)} alt="Favourite Item" className="w-20 h-16 rounded object-cover object-top" /> : <div className="w-20 h-16 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
     { key: "position", label: "Position" },
     { key: "href", label: "Link URL" },

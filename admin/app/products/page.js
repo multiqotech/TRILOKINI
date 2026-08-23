@@ -68,7 +68,7 @@ export default function ProductsPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val) => val ? <img src={resolveImage(val)} alt="Product" className="w-12 h-12 rounded object-cover" /> : <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val) => val ? <img src={resolveImage(val)} alt="Product" className="w-12 h-12 rounded object-cover object-top" /> : <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
     { key: "title", label: "Title", render: (val, row) => <div><p className="font-medium">{val}</p><p className="text-xs text-gray-500">{row.category?.title}</p></div> },
     { key: "designerName", label: "Designer", render: (val) => val || '-' },

@@ -58,7 +58,7 @@ export default function WeddingPage() {
     {
       key: "imageUrl",
       label: "Image",
-      render: (val, row) => val ? <img src={resolveImage(val)} alt="Wedding Item" className={`h-16 rounded object-cover ${row.isWide ? 'w-32' : 'w-16'}`} /> : <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
+      render: (val, row) => val ? <img src={resolveImage(val)} alt="Wedding Item" className={`h-16 rounded object-cover object-top ${row.isWide ? 'w-32' : 'w-16'}`} /> : <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400">No Img</div>
     },
     { key: "name", label: "Name" },
     { key: "subtitle", label: "Subtitle" },
