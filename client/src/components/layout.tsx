@@ -17,19 +17,25 @@ const icons = {
 export function DesktopHeader() {
   return (
     <header className="hidden bg-white lg:block" aria-label="Desktop header">
-      <div className="flex h-[31px] items-center justify-center border-b border-black bg-black text-[12px] tracking-[0.36px] text-white">
-        <nav className="flex gap-8" aria-label="Utility navigation">
+      <div className="flex h-[max(31px,2.15vw)] items-center justify-center bg-[#F5F5F5] text-[length:max(12px,0.83vw)] font-medium tracking-[0.36px] text-[#4A4A4A]">
+        <nav className="flex gap-[max(32px,2.22vw)]" aria-label="Utility navigation">
           <a href="#collections">COLLECTIONS</a><a href="#category">CATEGORY</a><a href="#films">FILMS</a><a href="#bespoke">BESPOKE</a><a href="#story">STORY</a>
         </nav>
       </div>
-      <div className="relative h-[113px] border-b border-gray-light">
-        <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="absolute left-1/2 top-1/2 h-[110px] w-[145px] -translate-x-1/2 -translate-y-1/2 object-contain" priority />
-        <div className="mx-auto flex h-[78px] max-w-[1269px] items-center justify-between px-6 text-[14px] tracking-[0.56px]">
-          <div className="flex items-center gap-5"><span>INR</span><Image src={icons.sort} alt="" width={10} height={10} /></div>
-          <div className="flex items-center gap-5"><span>ACCOUNT</span><IconButton label="Search" icon={icons.search} /><IconButton label="Account" icon={icons.account} /><IconButton label="Cart" icon={icons.cart} /></div>
+      <div className="relative h-[max(113px,7.84vw)] border-b border-gray-light">
+        <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="absolute left-1/2 top-[max(39px,2.7vw)] h-[max(60px,4.16vw)] w-[max(80px,5.55vw)] -translate-x-1/2 -translate-y-1/2 object-contain" priority />
+        <div className="flex h-[max(78px,5.41vw)] w-full items-center justify-between px-[max(40px,2.77vw)] text-[length:max(14px,0.97vw)] font-medium tracking-[0.56px]">
+          <div className="flex items-center gap-[max(40px,2.77vw)]">
+            <div className="flex items-center gap-[max(8px,0.55vw)]"><span>INR</span><Image src={icons.sort} alt="" width={10} height={10} className="h-[max(10px,0.69vw)] w-[max(10px,0.69vw)]" /></div>
+            <span>ACCOUNT</span>
+          </div>
+          <div className="flex items-center gap-[max(20px,1.38vw)]">
+            <IconButton label="Search" icon={icons.search} className="h-[max(40px,2.77vw)] w-[max(40px,2.77vw)] p-[max(8px,0.55vw)]" />
+            <IconButton label="Cart" icon={icons.cart} className="h-[max(40px,2.77vw)] w-[max(40px,2.77vw)] p-[max(8px,0.55vw)]" />
+          </div>
         </div>
-        <nav className="absolute bottom-0 left-1/2 flex w-full max-w-[933px] -translate-x-1/2 justify-between px-5 pb-2 text-[13px] tracking-[0.36px]" aria-label="Category navigation">
-          {navigation.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(" ", "-")}`}>{item}</a>)}
+        <nav className="absolute bottom-0 left-1/2 flex w-[max(933px,64.79vw)] -translate-x-1/2 justify-between px-[max(20px,1.38vw)] pb-[max(8px,0.55vw)] text-[length:max(13px,0.9vw)] font-medium tracking-[0.36px]" aria-label="Category navigation">
+          {navigation.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(" ", "-")}`} className={item === "SALE" ? "text-red-500" : ""}>{item}</a>)}
         </nav>
       </div>
     </header>
@@ -78,5 +84,13 @@ export function Footer() {
 
 export function ResponsiveShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  return <><DesktopHeader /><MobileHeader onMenu={() => setSidebarOpen(true)} /><Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />{children}<MobileStickyNav /></>;
+  return (
+    <>
+      <DesktopHeader />
+      <MobileHeader onMenu={() => setSidebarOpen(true)} />
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {children}
+      <MobileStickyNav />
+    </>
+  );
 }

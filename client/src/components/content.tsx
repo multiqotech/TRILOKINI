@@ -4,10 +4,10 @@ export function SectionHeading({ title, action = "VIEW ALL", href = "#" }: { tit
   return <div className="flex items-end justify-between border-b border-transparent px-[5px] lg:px-6"><h2 className="text-[14px] font-medium leading-[18px] tracking-[0.42px] lg:text-[24px] lg:leading-[30px] lg:tracking-[0.72px]">{title}</h2><a href={href} className="text-[12px] font-medium tracking-[0.36px] text-gray lg:text-[14px] lg:tracking-[0.42px]">{action}</a></div>;
 }
 
-type TileProps = { src: string; title?: string; subtitle?: string; href?: string; className?: string };
+type TileProps = { src: string; title?: string; subtitle?: string; href?: string; className?: string; style?: React.CSSProperties };
 
-function ImageTile({ src, title, subtitle, href = "#", className = "" }: TileProps) {
-  return <a href={href} className={`group relative block overflow-hidden bg-gray-light ${className}`}><Image src={src} alt={title ?? ""} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" /><span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-4 pb-4 pt-12 text-white"><strong className="block text-[13px] font-semibold tracking-[0.65px]">{title}</strong>{subtitle ? <span className="mt-1 block text-[12px] tracking-[0.36px]">{subtitle}</span> : null}</span></a>;
+function ImageTile({ src, title, subtitle, href = "#", className = "", style }: TileProps) {
+  return <a href={href} style={style} className={`group relative block overflow-hidden bg-gray-light ${className}`}><Image src={src} alt={title ?? ""} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" /><span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-4 pb-4 pt-12 text-white"><strong className="block text-[13px] font-semibold tracking-[0.65px]">{title}</strong>{subtitle ? <span className="mt-1 block text-[12px] tracking-[0.36px]">{subtitle}</span> : null}</span></a>;
 }
 
 export function EditorialTile(props: TileProps) { return <ImageTile {...props} />; }

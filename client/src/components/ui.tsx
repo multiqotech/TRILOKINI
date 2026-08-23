@@ -5,7 +5,7 @@ import { useState } from "react";
 
 type IconButtonProps = {
   label: string;
-  icon?: string;
+  icon?: string | React.ReactNode;
   onClick?: () => void;
   className?: string;
 };
@@ -18,7 +18,7 @@ export function IconButton({ label, icon, onClick, className = "" }: IconButtonP
       onClick={onClick}
       className={`inline-flex size-10 items-center justify-center border-0 bg-transparent p-2 text-black transition-opacity hover:opacity-60 ${className}`}
     >
-      {icon ? <Image src={icon} alt="" width={24} height={24} className="size-full object-contain" /> : <span className="text-lg leading-none">{label.slice(0, 1)}</span>}
+      {typeof icon === "string" ? <Image src={icon} alt="" width={24} height={24} className="size-full object-contain" /> : icon ? icon : <span className="text-lg leading-none">{label.slice(0, 1)}</span>}
     </button>
   );
 }

@@ -4,18 +4,39 @@ import Image from "next/image";
 import { useState } from "react";
 import { AddToCartButton, IconButton, SizeSelector, ColorSelector } from "./ui";
 
+import { Heart } from "lucide-react";
+
 export type Product = { id: string; src: string; designer: string; name: string; price: string; originalPrice?: string; discount?: string };
 
-export function ProductCard({ product, onFavorite }: { product: Product; onFavorite?: (product: Product) => void }) {
-  return <article className="group"><div className="relative aspect-[244/366] overflow-hidden bg-gray-light"><Image src={product.src} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" /><IconButton label={`Add ${product.name} to favourites`} icon="/icons/heart.png" onClick={() => onFavorite?.(product)} className="absolute right-1 top-1 size-9 bg-white/80 p-2" /></div><div className="pt-3 text-[12px] tracking-[0.36px]"><p className="text-[13px] font-medium tracking-[0.39px]">{product.designer}</p><h3 className="mt-1 leading-5 text-gray">{product.name}</h3><p className="mt-2 leading-5">{product.price}{product.originalPrice ? <del className="ml-3 text-gray">{product.originalPrice}</del> : null}{product.discount ? <span className="ml-3 text-sale">{product.discount}</span> : null}</p></div></article>;
+export function ProductCard({ product, onFavorite, hideFavorite }: { product: Product; onFavorite?: (product: Product) => void; hideFavorite?: boolean }) {
+  return <article className="group"><div className="relative aspect-[244/366] overflow-hidden bg-gray-light"><Image src={product.src} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />{!hideFavorite && <IconButton label={`Add ${product.name} to favourites`} icon={<Heart size={20} />} onClick={() => onFavorite?.(product)} className="absolute right-1 top-1 size-9 bg-white/80 p-2" />}</div><div className="pt-3 text-[12px] tracking-[0.36px]"><p className="text-[13px] font-medium tracking-[0.39px]">{product.designer}</p><h3 className="mt-1 leading-5 text-gray">{product.name}</h3><p className="mt-2 leading-5">{product.price}{product.originalPrice ? <del className="ml-3 text-gray">{product.originalPrice}</del> : null}{product.discount ? <span className="ml-3 text-sale">{product.discount}</span> : null}</p></div></article>;
 }
 
 export function ProductGrid({ products }: { products: Product[] }) {
-  return <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4 lg:gap-x-4">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div>;
+  return <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-5 lg:gap-x-4">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div>;
 }
 
-export function ProductCarousel({ products, title }: { products: Product[]; title?: string }) {
-  return <section>{title ? <h2 className="mb-5 text-[18px] font-semibold tracking-[0.72px]">{title}</h2> : null}<div className="flex snap-x gap-3 overflow-x-auto pb-4">{products.map((product) => <div key={product.id} className="w-[140px] min-w-[140px] snap-start lg:w-[244px] lg:min-w-[244px]"><ProductCard product={product} /></div>)}</div></section>;
+export function ProductCarousel({ products, title, hideFavorite }: { products: Product[]; title?: string; hideFavorite?: boolean }) {
+  return (
+    <section className="relative">
+      {title ? <h2 className="mb-5 text-[18px] font-semibold tracking-[0.72px]">{title}</h2> : null}
+      <div className="relative group px-[5px] lg:px-12">
+        <button className="absolute left-0 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div className="flex snap-x snap-mandatory gap-3 lg:gap-4 overflow-x-auto pb-4 scrollbar-hide">
+          {products.map((product) => (
+            <div key={product.id} className="w-[140px] min-w-[140px] snap-start lg:w-[calc(20%-13px)] lg:min-w-[calc(20%-13px)]">
+              <ProductCard product={product} hideFavorite={hideFavorite} />
+            </div>
+          ))}
+        </div>
+        <button className="absolute right-0 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </section>
+  );
 }
 
 export function ProductGallery({ images, alt }: { images: string[]; alt: string }) {
