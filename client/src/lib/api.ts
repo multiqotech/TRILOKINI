@@ -100,3 +100,22 @@ export const getDesigners = () => fetchApi<Designer[]>('/api/designers');
 export const getCelebrities = () => fetchApi<Celebrity[]>('/api/celebrities');
 export const getWeddingItems = () => fetchApi<WeddingItem[]>('/api/wedding-items');
 export const getFavourites = () => fetchApi<FavouriteItem[]>('/api/favourites');
+
+export type CollectionImage = {
+  _id: string;
+  collection: string;
+  imageUrl: string;
+  position: number;
+  href: string;
+  isActive: boolean;
+};
+
+export type Collection = {
+  _id: string;
+  title: string;
+  order: number;
+  isActive: boolean;
+  images: CollectionImage[];
+};
+
+export const getActiveCollections = () => fetchApi<Collection[]>('/api/collections/active');

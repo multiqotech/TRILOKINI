@@ -43,6 +43,16 @@ export const createFavourite = (data) => api.post('/api/favourites', data);
 export const updateFavourite = (id, data) => api.put(`/api/favourites/${id}`, data);
 export const deleteFavourite = (id) => api.delete(`/api/favourites/${id}`);
 
+export const getCollections = () => api.get('/api/collections');
+export const createCollection = (data) => api.post('/api/collections', data);
+export const updateCollection = (id, data) => api.put(`/api/collections/${id}`, data);
+export const deleteCollection = (id) => api.delete(`/api/collections/${id}`);
+
+export const getCollectionImages = () => api.get('/api/collection-images');
+export const createCollectionImage = (data) => api.post('/api/collection-images', data);
+export const updateCollectionImage = (id, data) => api.put(`/api/collection-images/${id}`, data);
+export const deleteCollectionImage = (id) => api.delete(`/api/collection-images/${id}`);
+
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('image', file);

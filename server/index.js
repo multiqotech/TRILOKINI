@@ -29,6 +29,8 @@ const designerRoutes = require('./routes/designerRoutes');
 const celebrityRoutes = require('./routes/celebrityRoutes');
 const weddingRoutes = require('./routes/weddingRoutes');
 const favouriteRoutes = require('./routes/favouriteRoutes');
+const collectionRoutes = require('./routes/collectionRoutes');
+const collectionImageRoutes = require('./routes/collectionImageRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 
 // Basic Route
@@ -43,6 +45,8 @@ app.use('/api/designers', designerRoutes);
 app.use('/api/celebrities', celebrityRoutes);
 app.use('/api/wedding-items', weddingRoutes);
 app.use('/api/favourites', favouriteRoutes);
+app.use('/api/collections', collectionRoutes);
+app.use('/api/collection-images', collectionImageRoutes);
 app.use('/api/upload', uploadRoutes);
 
 const startServer = async () => {

@@ -10,6 +10,8 @@ import {
   Star,
   Heart,
   Bookmark,
+  Layers,
+  Images,
   Menu,
   X,
   Moon,
@@ -27,6 +29,8 @@ const navItems = [
   { name: "Celebrities", href: "/celebrities", icon: Star },
   { name: "Wedding Studio", href: "/wedding", icon: Heart },
   { name: "Favourites", href: "/favourites", icon: Bookmark },
+  { name: "Collections", href: "/collections", icon: Layers },
+  { name: "Collection Images", href: "/collection-images", icon: Images },
 ];
 
 export default function AdminShell({ children }) {
@@ -82,7 +86,9 @@ export default function AdminShell({ children }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href;
+              const isActive = item.href === "/"
+                ? pathname === "/"
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
               
               return (
                 <Link 
