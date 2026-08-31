@@ -94,6 +94,7 @@ async function fetchApi<T>(endpoint: string): Promise<T> {
 // API functions
 export const getActiveBanners = () => fetchApi<HeroBanner[]>('/api/hero-banners/active');
 export const getHomepageCategories = () => fetchApi<Category[]>('/api/categories/homepage');
+export const getBulkShowCategories = () => fetchApi<Category[]>('/api/categories/bulk-show');
 export const getHomepageProducts = () => fetchApi<HomepageProductGroup[]>('/api/products/homepage');
 export const getBulkShowProducts = () => fetchApi<HomepageProductGroup[]>('/api/products/bulk-show');
 export const getDesigners = () => fetchApi<Designer[]>('/api/designers');

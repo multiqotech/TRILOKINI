@@ -17,13 +17,17 @@ const icons = {
 
 export function DesktopHeader() {
   const pathname = usePathname();
+  const onCategories = pathname === "/categories";
   const onCollections = pathname === "/collections";
 
   return (
     <header className="hidden bg-white lg:block" aria-label="Desktop header">
       <div className="relative flex h-[max(31px,2.15vw)] items-center justify-center bg-[#F5F5F5] text-[length:max(12px,0.83vw)] font-medium tracking-[0.36px] text-[#757575]">
         <nav className="flex gap-[max(32px,2.22vw)]" aria-label="Utility navigation">
-          <a href="#category">CATEGORY</a>
+          <a href="/categories" className={onCategories ? "relative font-semibold text-black" : ""}>
+            CATEGORY
+            {onCategories ? <span className="absolute -bottom-[max(6px,0.42vw)] left-1/2 h-[2px] w-[100px] -translate-x-1/2 bg-black" /> : null}
+          </a>
           <a href="/collections" className={onCollections ? "relative font-semibold text-black" : ""}>
             COLLECTIONS
             {onCollections ? <span className="absolute -bottom-[max(6px,0.42vw)] left-1/2 h-[2px] w-[100px] -translate-x-1/2 bg-black" /> : null}
@@ -68,7 +72,7 @@ export function Sidebar({ open = false, onClose }: { open?: boolean; onClose?: (
   return (
     <aside className="fixed inset-y-0 left-0 z-50 w-[310px] max-w-[86vw] bg-white shadow-xl" aria-label="Mobile menu">
       <div className="flex items-center justify-between border-b border-gray-light px-4 py-5"><p className="font-display text-[32px]">Namaste!</p><IconButton label="Close menu" onClick={onClose} /></div>
-      <div className="px-5 py-5 text-[14px] tracking-[0.56px]"><div className="mb-7 flex justify-between"><span>INR</span><span>ACCOUNT</span></div><nav className="flex flex-col gap-5" aria-label="Mobile navigation">{["CATEGORY", "COLLECTIONS", "FILMS", "BESPOKE", "STORY", "CONTACT US"].map((item) => <a key={item} href={item === "COLLECTIONS" ? "/collections" : `#${item.toLowerCase()}`} onClick={onClose}>{item}</a>)}</nav><div className="mt-12 border-t border-black/20 pt-6 text-gray"><p>care@offstore.com</p><p className="mt-4">1800 120 000 500 (India)</p></div></div>
+      <div className="px-5 py-5 text-[14px] tracking-[0.56px]"><div className="mb-7 flex justify-between"><span>INR</span><span>ACCOUNT</span></div><nav className="flex flex-col gap-5" aria-label="Mobile navigation">{["CATEGORY", "COLLECTIONS", "FILMS", "BESPOKE", "STORY", "CONTACT US"].map((item) => <a key={item} href={item === "CATEGORY" ? "/categories" : item === "COLLECTIONS" ? "/collections" : `#${item.toLowerCase()}`} onClick={onClose}>{item}</a>)}</nav><div className="mt-12 border-t border-black/20 pt-6 text-gray"><p>care@offstore.com</p><p className="mt-4">1800 120 000 500 (India)</p></div></div>
     </aside>
   );
 }

@@ -1,6 +1,8 @@
 import HomePage from '@/components/home-page';
 import { getActiveBanners, getHomepageCategories, getHomepageProducts, getBulkShowProducts, getDesigners, getCelebrities, getWeddingItems, getFavourites } from '@/lib/api';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const [banners, categories, productsByCategory, bulkShowProducts, designers, celebrities, weddingItems, favourites] = await Promise.all([
     getActiveBanners(),
