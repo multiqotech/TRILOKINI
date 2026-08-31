@@ -89,11 +89,9 @@ export default function ProductsPage() {
     { name: "category", label: "Category", type: "select", options: categories.map(c => ({ label: c.title, value: c._id })), required: true },
     { name: "title", label: "Title", type: "text", required: true },
     { name: "subtitle", label: "Subtitle", type: "text" },
-    { name: "currentPrice", label: "Current Price (₹)", type: "number", required: true },
-    { name: "previousPrice", label: "Previous Price (₹)", type: "number" },
-    { name: "discountPercentage", label: "Discount Percentage", type: "number" },
-    { name: "imageUrl", label: "Product Image", type: "image", aspectRatio: 2/3 },
     { name: "designerName", label: "Designer Name", type: "text" },
+    { name: "tags", label: "Tags (Comma Separated)", type: "tags" },
+    { name: "variants", label: "Color Variants & Pricing", type: "variants" },
     { name: "showInHomePage", label: "Show in Homepage", type: "toggle" },
     { name: "homePageOrder", label: "Home Page Order", type: "number" }
   ];

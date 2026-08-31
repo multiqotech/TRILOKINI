@@ -3,6 +3,8 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageUpload from "./ImageUpload";
 import ToggleSwitch from "./ToggleSwitch";
+import MultiImageUpload from "./MultiImageUpload";
+import { Plus, Trash2 } from "lucide-react";
 
 export default function FormModal({ isOpen, onClose, title, fields, initialData = null, onSubmit }) {
   const [formData, setFormData] = useState({});
@@ -145,6 +147,110 @@ export default function FormModal({ isOpen, onClose, title, fields, initialData 
                             onChange={(checked) => handleChange(field.name, checked)} 
                          />
                       </div>
+                    ) : field.type === "variants" ? (
+                      <div className="mt-2 space-y-4">
+                        {(formData[field.name] || []).map((variant, index) => (
+                          <div key={index} className="p-4 rounded-xl border relative" style={{ borderColor: 'var(--border-color)', background: 'rgba(255,255,255,0.02)' }}>
+                            <button 
+                              type="button" 
+                              onClick={() => {
+                                const newVariants = [...formData[field.name]];
+                                newVariants.splice(index, 1);
+                                handleChange(field.name, newVariants);
+                              }}
+                              className="absolute top-4 right-4 text-red-500 hover:text-red-400"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                            
+                            <div className="space-y-4">
+                              <div>
+                                <label className="text-xs text-gray-400">Color / Tone *</label>
+                                <input
+                                  type="text"
+                                  required
+                                  value={variant.color || ''}
+                                  onChange={(e) => {
+                                    const newVariants = [...formData[field.name]];
+                                    newVariants[index].color = e.target.value;
+                                    handleChange(field.name, newVariants);
+                                  }}
+                                  className="w-full mt-1 px-3 py-2 rounded-lg"
+                                  style={{ background: '#0f0f0f', border: '1px solid var(--border-color)', color: 'white' }}
+                                />
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label className="text-xs text-gray-400">Current Price *</label>
+                                  <input
+                                    type="number"
+                                    required
+                                    value={variant.currentPrice || ''}
+                                    onChange={(e) => {
+                                      const newVariants = [...formData[field.name]];
+                                      newVariants[index].currentPrice = Number(e.target.value);
+                                      handleChange(field.name, newVariants);
+                                    }}
+                                    className="w-full mt-1 px-3 py-2 rounded-lg"
+                                    style={{ background: '#0f0f0f', border: '1px solid var(--border-color)', color: 'white' }}
+                                  />
+                                </div>
+                                <div>
+                                  <label className="text-xs text-gray-400">Cut Price (Previous)</label>
+                                  <input
+                                    type="number"
+                                    value={variant.previousPrice || ''}
+                                    onChange={(e) => {
+                                      const newVariants = [...formData[field.name]];
+                                      newVariants[index].previousPrice = e.target.value ? Number(e.target.value) : undefined;
+                                      handleChange(field.name, newVariants);
+                                    }}
+                                    className="w-full mt-1 px-3 py-2 rounded-lg"
+                                    style={{ background: '#0f0f0f', border: '1px solid var(--border-color)', color: 'white' }}
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <label className="text-xs text-gray-400 mb-2 block">Images</label>
+                                <MultiImageUpload 
+                                  value={variant.images || []} 
+                                  onChange={(urls) => {
+                                    const newVariants = [...formData[field.name]];
+                                    newVariants[index].images = urls;
+                                    handleChange(field.name, newVariants);
+                                  }} 
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newVariants = [...(formData[field.name] || []), { color: '', images: [], currentPrice: '' }];
+                            handleChange(field.name, newVariants);
+                          }}
+                          className="w-full py-3 rounded-xl border border-dashed flex items-center justify-center gap-2 text-sm transition-colors"
+                          style={{ borderColor: 'var(--primary-teal)', color: 'var(--primary-teal)' }}
+                        >
+                          <Plus size={16} /> Add Variant
+                        </button>
+                      </div>
+                    ) : field.type === "tags" ? (
+                      <input
+                        type="text"
+                        required={field.required}
+                        value={(formData[field.name] || []).join(', ')}
+                        placeholder="e.g. trending, new (comma separated)"
+                        onChange={(e) => handleChange(field.name, e.target.value.split(',').map(t => t.trim()).filter(Boolean))}
+                        className="w-full px-4 py-2.5 rounded-xl transition-all focus:outline-none focus:ring-1"
+                        style={{ 
+                          background: '#0f0f0f', 
+                          border: '1px solid var(--border-color)', 
+                          color: 'white',
+                          '--tw-ring-color': 'var(--primary-teal)'
+                        }}
+                      />
                     ) : (
                       <input
                         type={field.type || "text"}
