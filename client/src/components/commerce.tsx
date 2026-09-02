@@ -1,15 +1,58 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, useRef } from "react";
 import { AddToCartButton, IconButton, SizeSelector, ColorSelector } from "./ui";
 
 import { Heart } from "lucide-react";
 
-export type Product = { id: string; src: string; designer: string; name: string; price: string; originalPrice?: string; discount?: string };
+export type Product = {
+  id: string;
+  src: string;
+  designer: string;
+  name: string;
+  price: string;
+  originalPrice?: string;
+  discount?: string;
+  href?: string;
+};
 
 export function ProductCard({ product, onFavorite, hideFavorite }: { product: Product; onFavorite?: (product: Product) => void; hideFavorite?: boolean }) {
-  return <article className="group"><div className="relative aspect-[244/366] overflow-hidden bg-gray-light"><Image src={product.src} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />{!hideFavorite && <IconButton label={`Add ${product.name} to favourites`} icon={<Heart size={20} />} onClick={() => onFavorite?.(product)} className="absolute right-1 top-1 size-9 bg-white/80 p-2" />}</div><div className="pt-3 text-[12px] tracking-[0.36px]"><p className="text-[13px] font-medium tracking-[0.39px]">{product.designer}</p><h3 className="mt-1 leading-5 text-gray">{product.name}</h3><p className="mt-2 leading-5">{product.price}{product.originalPrice ? <del className="ml-3 text-gray">{product.originalPrice}</del> : null}{product.discount ? <span className="ml-3 text-sale">{product.discount}</span> : null}</p></div></article>;
+  const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onFavorite?.(product);
+  };
+
+  return (
+    <Link href={product.href || "#"} className="group block">
+      <article className="group">
+        <div className="relative aspect-[244/366] overflow-hidden bg-gray-light">
+          <Image src={product.src} alt={product.name} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+          {!hideFavorite && (
+            <button
+              type="button"
+              aria-label={`Add ${product.name} to favourites`}
+              onClick={handleFavoriteClick}
+              className="absolute right-1 top-1 flex size-9 items-center justify-center bg-white/80 p-2"
+            >
+              <Heart size={20} />
+            </button>
+          )}
+        </div>
+        <div className="pt-3 text-[12px] tracking-[0.36px]">
+          <p className="text-[13px] font-medium tracking-[0.39px]">{product.designer}</p>
+          <h3 className="mt-1 leading-5 text-gray">{product.name}</h3>
+          <p className="mt-2 leading-5">
+            {product.price}
+            {product.originalPrice ? <del className="ml-3 text-gray">{product.originalPrice}</del> : null}
+            {product.discount ? <span className="ml-3 text-sale">{product.discount}</span> : null}
+          </p>
+        </div>
+      </article>
+    </Link>
+  );
 }
 
 export function ProductGrid({ products }: { products: Product[] }) {
@@ -37,7 +80,7 @@ export function ProductCarousel({ products, title, hideFavorite }: { products: P
         <div className="mb-5 flex items-center justify-between px-[5px] lg:px-12">
           <h2 className="text-[18px] font-semibold tracking-[0.72px] uppercase">{title}</h2>
           <button type="button" className="text-[13px] font-medium underline underline-offset-4 hover:text-gray-600 transition-colors">
-            VIEW ALL
+            <Link href="/products">VIEW ALL</Link>
           </button>
         </div>
       ) : null}
@@ -69,8 +112,42 @@ export function ProductThumbnailStrip({ images, alt, selected = 0, onSelect }: {
   return <div className="order-2 flex gap-3 overflow-x-auto lg:order-1 lg:flex-col">{images.map((image, index) => <button key={`${image}-${index}`} type="button" onClick={() => onSelect?.(index)} className={`relative size-[78px] min-w-[78px] overflow-hidden border ${selected === index ? "border-black" : "border-transparent"}`}><Image src={image} alt={`${alt} view ${index + 1}`} fill className="object-cover" /></button>)}</div>;
 }
 
-export function Filters({ groups }: { groups: { title: string; options: string[] }[] }) {
-  return <aside className="hidden w-[199px] shrink-0 lg:block" aria-label="Product filters"><div className="space-y-8">{groups.map((group) => <fieldset key={group.title}><legend className="mb-4 text-[14px] font-semibold tracking-[0.65px]">{group.title}</legend><div className="space-y-3">{group.options.map((option) => <label key={option} className="flex items-center gap-2 text-[12px] tracking-[0.36px]"><input type="checkbox" className="size-[13px] accent-black" />{option}</label>)}</div></fieldset>)}</div></aside>;
+export function Filters({
+  groups,
+  selected = {},
+  onToggle,
+}: {
+  groups: { title: string; options: string[] }[];
+  selected?: Record<string, string[]>;
+  onToggle?: (groupTitle: string, option: string) => void;
+}) {
+  return (
+    <aside className="hidden w-[199px] shrink-0 lg:block" aria-label="Product filters">
+      <div className="space-y-8">
+        {groups.map((group) => (
+          <fieldset key={group.title}>
+            <legend className="mb-4 text-[14px] font-semibold tracking-[0.65px]">{group.title}</legend>
+            <div className="space-y-3">
+              {group.options.map((option) => {
+                const checked = Boolean(selected[group.title]?.includes(option));
+                return (
+                  <label key={option} className="flex items-center gap-2 text-[12px] tracking-[0.36px]">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onToggle?.(group.title, option)}
+                      className="size-[13px] accent-black"
+                    />
+                    {option}
+                  </label>
+                );
+              })}
+            </div>
+          </fieldset>
+        ))}
+      </div>
+    </aside>
+  );
 }
 
 export function SortControl({ value = "Popular", onChange }: { value?: string; onChange?: (value: string) => void }) {
@@ -87,9 +164,34 @@ export function CartItem({ product, quantity = 1, onRemove }: { product: Product
   return <article className="flex gap-4 border-b border-gray-light py-4"><div className="relative size-[88px] shrink-0 bg-gray-light"><Image src={product.src} alt={product.name} fill className="object-cover" /></div><div className="min-w-0 flex-1 text-[12px] tracking-[0.36px]"><p className="font-medium">{product.designer}</p><p className="mt-1 text-gray">{product.name}</p><p className="mt-2">{quantity} x {product.price}</p></div><button type="button" onClick={onRemove} className="self-start text-[12px] text-gray underline">Remove</button></article>;
 }
 
-export function CartPopout({ open, items, onClose }: { open: boolean; items: Product[]; onClose?: () => void }) {
+export function CartPopout({ open, items, onClose, onRemove }: { open: boolean; items: Product[]; onClose?: () => void; onRemove?: (id: string) => void }) {
   if (!open) return null;
-  return <aside className="fixed inset-y-0 right-0 z-50 w-[min(440px,100vw)] bg-white p-6 shadow-xl" aria-label="Shopping cart"><div className="flex items-center justify-between border-b border-black pb-4"><h2 className="text-[18px] font-semibold tracking-[0.72px]">YOUR CART</h2><IconButton label="Close cart" onClick={onClose} /></div><div>{items.map((item) => <CartItem key={item.id} product={item} />)}</div><div className="mt-6"><AddToCartButton>CHECKOUT</AddToCartButton></div></aside>;
+  return (
+    <>
+      <div className="fixed inset-0 z-50 bg-black/20" onClick={onClose} />
+      <aside className="fixed inset-y-0 right-0 z-50 w-[min(440px,100vw)] overflow-y-auto bg-white p-6 shadow-xl" aria-label="Shopping cart">
+        <div className="flex items-center justify-between border-b border-black pb-4">
+          <h2 className="text-[18px] font-semibold tracking-[0.72px]">YOUR CART</h2>
+          <IconButton label="Close cart" onClick={onClose} />
+        </div>
+        {items.length === 0 ? (
+          <p className="py-12 text-center text-[13px] text-gray">Your cart is empty.</p>
+        ) : (
+          <div>{items.map((item) => <CartItem key={item.id} product={item} onRemove={() => onRemove?.(item.id)} />)}</div>
+        )}
+        <div className="mt-6 space-y-3">
+          <Link href="/cart" onClick={onClose} className="block">
+            <AddToCartButton>VIEW CART</AddToCartButton>
+          </Link>
+          {items.length > 0 ? (
+            <Link href="/cart" onClick={onClose} className="block">
+              <button type="button" className="h-12 w-full border border-black bg-white text-[13px] font-semibold tracking-[0.65px]">CHECKOUT</button>
+            </Link>
+          ) : null}
+        </div>
+      </aside>
+    </>
+  );
 }
 
 export function ProductDetailOptions({ sizes, colors, onAddToCart }: { sizes: string[]; colors: { name: string; value: string }[]; onAddToCart?: () => void }) {

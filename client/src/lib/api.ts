@@ -32,6 +32,15 @@ export type ApiProduct = {
   imageUrl: string;
   designerName: string;
   showInHomePage: boolean;
+  variants?: Array<{
+    color: string;
+    images: string[];
+    currentPrice: number;
+    previousPrice?: number;
+    discountPercentage?: number;
+  }>;
+  tags?: string[];
+  isActive?: boolean;
 };
 
 export type Designer = {
@@ -97,6 +106,10 @@ export const getHomepageCategories = () => fetchApi<Category[]>('/api/categories
 export const getBulkShowCategories = () => fetchApi<Category[]>('/api/categories/bulk-show');
 export const getHomepageProducts = () => fetchApi<HomepageProductGroup[]>('/api/products/homepage');
 export const getBulkShowProducts = () => fetchApi<HomepageProductGroup[]>('/api/products/bulk-show');
+export const getCategories = () => fetchApi<Category[]>('/api/categories');
+export const getProducts = () => fetchApi<ApiProduct[]>('/api/products');
+export const getProductsByCategory = (categoryId: string) => fetchApi<ApiProduct[]>(`/api/products/category/${categoryId}`);
+export const getProductById = (productId: string) => fetchApi<ApiProduct>(`/api/products/${productId}`);
 export const getDesigners = () => fetchApi<Designer[]>('/api/designers');
 export const getCelebrities = () => fetchApi<Celebrity[]>('/api/celebrities');
 export const getWeddingItems = () => fetchApi<WeddingItem[]>('/api/wedding-items');

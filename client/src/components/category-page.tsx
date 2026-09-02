@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Footer, ResponsiveShell } from "./layout";
 import type { Category } from "@/lib/api";
 
@@ -22,8 +23,8 @@ function CategoryMosaicTile({
   const subtitle = category.description || "SHOP NOW";
 
   return (
-    <article className={`group relative overflow-hidden bg-[#f3f3f3] ${className}`}>
-      <div className="relative h-full w-full">
+    <Link href={`/products?category=${category._id}`} className={`group relative block overflow-hidden bg-[#f3f3f3] ${className}`}>
+      <article className="relative h-full w-full">
         <Image
           src={resolveImage(category.imageUrl)}
           alt={title}
@@ -39,8 +40,8 @@ function CategoryMosaicTile({
             {subtitle}
           </p>
         </div>
-      </div>
-    </article>
+      </article>
+    </Link>
   );
 }
 

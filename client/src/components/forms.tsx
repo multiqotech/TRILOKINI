@@ -7,7 +7,7 @@ function FormField({ id, label, type = "text" }: { id: string; label: string; ty
 }
 
 export function LoginForm({ onSubmit }: { onSubmit?: (data: FormData) => void }) {
-  return <form className="space-y-5" onSubmit={(event) => { event.preventDefault(); onSubmit?.(new FormData(event.currentTarget)); }}><FormField id="mobile-number" label="Mobile Number" type="tel" /><FormField id="password" label="Password" type="password" /><div className="flex justify-between text-[12px] text-gray"><a href="#forgot-password">Forgot Your Password ?</a><a href="#signup">Don&apos;t have an account ? Sign Up</a></div><button type="submit" className="h-11 w-full border border-black bg-black text-[13px] font-semibold tracking-[0.65px] text-white">LOGIN</button><button type="button" className="h-11 w-full border border-gray-light bg-white text-[13px] font-semibold tracking-[0.65px]">LOGIN WITH GOOGLE</button></form>;
+  return <form className="space-y-5" onSubmit={(event) => { event.preventDefault(); onSubmit?.(new FormData(event.currentTarget)); }}><FormField id="mobile-number" label="Mobile Number" type="tel" /><FormField id="password" label="Password" type="password" /><div className="flex justify-between text-[12px] text-gray"><a href="#forgot-password">Forgot Your Password ?</a><a href="/signup">Don&apos;t have an account ? Sign Up</a></div><button type="submit" className="h-11 w-full border border-black bg-black text-[13px] font-semibold tracking-[0.65px] text-white">LOGIN</button><button type="button" className="h-11 w-full border border-gray-light bg-white text-[13px] font-semibold tracking-[0.65px]">LOGIN WITH GOOGLE</button></form>;
 }
 
 export function SignupForm({ onSubmit }: { onSubmit?: (data: FormData) => void }) {

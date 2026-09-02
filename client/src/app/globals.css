@@ -7,7 +7,11 @@
   --trilokini-gray-light: #c2c2c2;
   --trilokini-sale: #e32a2a;
   --trilokini-action: #c80000;
+  --trilokini-sale-nav: #f64545;
+  --trilokini-chat: #f04a50;
+  --trilokini-utility-bar: #eaeaea;
   --trilokini-footer-wash: rgba(234, 234, 234, 0.67);
+  --shadow-header: 0 1px 4px rgba(0, 0, 0, 0.13);
   --space-page: 24px;
   --space-mobile: 5px;
   --space-section: 48px;
@@ -34,6 +38,7 @@
   --color-gray-light: var(--trilokini-gray-light);
   --color-sale: var(--trilokini-sale);
   --color-action: var(--trilokini-action);
+  --color-sale-nav: var(--trilokini-sale-nav);
   --color-footer-wash: var(--trilokini-footer-wash);
   --font-sans: var(--font-plus-jakarta);
   --font-display: var(--font-crimson-text);

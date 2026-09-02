@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Footer, ResponsiveShell } from "./layout";
 import type { Collection, CollectionImage } from "@/lib/api";
 
@@ -20,15 +21,17 @@ function MosaicTile({
   src,
   alt,
   className,
+  href = "#",
 }: {
   src: string;
   alt: string;
   className: string;
+  href?: string;
 }) {
   return (
-    <div className={`relative overflow-hidden bg-gray-light ${className}`}>
-      <Image src={src} alt={alt} fill className="object-cover" />
-    </div>
+    <Link href={href} className={`relative block overflow-hidden bg-gray-light ${className}`}>
+      <Image src={src} alt={alt} fill className="object-cover transition-transform duration-500 hover:scale-[1.02]" />
+    </Link>
   );
 }
 
@@ -45,10 +48,15 @@ function CollectionSection({ collection }: { collection: Collection }) {
     { position: 6, mobile: 'col-span-2 aspect-[391/288]', desktop: 'col-span-2 aspect-[683/506]' },
   ];
 
+  const getHref = (position: number) => {
+    const match = images?.find((img) => Number(img.position) === position);
+    return match?.href || `/collections/${collection._id}`;
+  };
+
   return (
     <section className="space-y-1.5 lg:space-y-2.5">
       <h2 className="px-[5px] text-[14px] font-medium leading-[18px] tracking-[0.42px] lg:px-6 lg:text-[24px] lg:leading-8 lg:tracking-[0.72px]">
-        {title}
+        <Link href={`/collections/${collection._id}`} className="hover:underline">{title}</Link>
       </h2>
 
       <div className="grid grid-cols-2 gap-2 px-[5px] lg:hidden">
@@ -58,6 +66,7 @@ function CollectionSection({ collection }: { collection: Collection }) {
             src={imageAt(images, tile.position)}
             alt={`${title} ${tile.position}`}
             className={tile.mobile}
+            href={getHref(tile.position)}
           />
         ))}
       </div>
@@ -69,6 +78,7 @@ function CollectionSection({ collection }: { collection: Collection }) {
             src={imageAt(images, tile.position)}
             alt={`${title} ${tile.position}`}
             className={tile.desktop}
+            href={getHref(tile.position)}
           />
         ))}
       </div>
