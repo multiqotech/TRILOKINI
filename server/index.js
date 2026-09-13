@@ -65,5 +65,21 @@ const startServer = async () => {
     console.log(`Server running on port ${PORT}`);
   });
 };
+app.get("/ping", (_req, res) => {
+  res.status(200).send("pong");
+});
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+
+    setInterval(async () => {
+      try {
+        // const url = process.env.APP_URL || `http://localhost:${PORT}`;
+        await fetch('https://trilokini.onrender.com/ping');
+        console.log("Self ping successful");
+      } catch (err) {
+        console.error("Self ping failed:", err);
+      }
+    }, 10 * 1000); // 10 seconds
+  });
 
 startServer();
