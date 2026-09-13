@@ -31,7 +31,7 @@ export function DesktopHeader() {
   return (
     <>
       <header className="sticky top-0 z-50 hidden bg-white lg:block" aria-label="Desktop header">
-        <div className="relative h-[190px]">
+        <div className="relative h-[140px]">
           <div className="flex h-[31px] items-center justify-center bg-[#EAEAEA]">
             <nav className="flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
               {utilityNav.map((item) => (
@@ -115,10 +115,10 @@ export function MobileHeader({ onMenu }: { onMenu?: () => void }) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-[51px] items-center justify-between border-b border-gray-light bg-white px-1 lg:hidden" aria-label="Mobile header">
+      <header className="sticky top-0 z-50 flex h-[160px] items-center justify-between border-b border-gray-light bg-white px-1 lg:hidden" aria-label="Mobile header">
         <IconButton label="Open menu" icon={icons.menu} onClick={onMenu} className="size-10" />
         <Link href="/">
-          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={170} height={36} className="h-10 w-[188px] object-contain" priority />
+          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="object-contain" style={{ width: '182px', height: '139px' }} priority />
         </Link>
         <div className="flex items-center">
           <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex size-10 items-center justify-center" aria-label="Search">
