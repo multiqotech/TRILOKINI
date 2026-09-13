@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { FormPageLayout } from "@/components/templates/page-shell";
@@ -22,7 +22,7 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
-export default function CustomOrdersPage() {
+function CustomOrdersContent() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState(searchParams.get("email") || "");
   const [mobile, setMobile] = useState(searchParams.get("mobile") || "");
@@ -193,5 +193,13 @@ export default function CustomOrdersPage() {
         ) : null}
       </div>
     </FormPageLayout>
+  );
+}
+
+export default function CustomOrdersPage() {
+  return (
+    <Suspense fallback={<FormPageLayout><div className="py-20 text-center text-[13px] text-gray">Loading...</div></FormPageLayout>}>
+      <CustomOrdersContent />
+    </Suspense>
   );
 }
