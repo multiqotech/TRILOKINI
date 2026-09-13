@@ -31,7 +31,7 @@ export function DesktopHeader() {
   return (
     <>
       <header className="sticky top-0 z-50 hidden bg-white lg:block" aria-label="Desktop header">
-        <div className="relative h-[140px]">
+        <div className="relative h-[190px]">
           <div className="flex h-[31px] items-center justify-center bg-[#EAEAEA]">
             <nav className="flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
               {utilityNav.map((item) => (
@@ -81,7 +81,7 @@ export function DesktopHeader() {
               </div>
             </div>
 
-            <nav className="absolute inset-x-0 bottom-[8px] mx-auto flex w-[933px] max-w-[calc(100%-48px)] justify-between text-[12px] font-medium leading-normal text-black" aria-label="Category navigation">
+            <nav className="absolute inset-x-0 bottom-[8px] z-[2] mx-auto flex w-[933px] max-w-[calc(100%-48px)] justify-between text-[12px] font-medium leading-normal text-black" aria-label="Category navigation">
               {categoryNav.map((item) => (
                 <Link key={item.href} href={item.href} className={item.highlight ? "text-sale-nav" : "hover:text-gray"}>
                   {item.label}
@@ -90,8 +90,16 @@ export function DesktopHeader() {
             </nav>
           </div>
 
-          <Link href="/" className="absolute left-1/2 top-[5px] z-10 -translate-x-1/2">
-            <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="h-[139px] w-[182px] object-cover" priority />
+          <Link href="/" className="absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2" style={{ top: 'calc(50% - 10px)' }}>
+            <Image
+              src="/logos/trilokini-footer.png"
+              alt="Trilokini"
+              width={182}
+              height={139}
+              style={{ width: '182px', height: '139px' }}
+              className="object-contain"
+              priority
+            />
           </Link>
         </div>
       </header>
@@ -110,7 +118,7 @@ export function MobileHeader({ onMenu }: { onMenu?: () => void }) {
       <header className="sticky top-0 z-50 flex h-[51px] items-center justify-between border-b border-gray-light bg-white px-1 lg:hidden" aria-label="Mobile header">
         <IconButton label="Open menu" icon={icons.menu} onClick={onMenu} className="size-10" />
         <Link href="/">
-          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={119} height={50} className="h-[50px] w-[65px] object-cover" priority />
+          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={170} height={36} className="h-10 w-[188px] object-contain" priority />
         </Link>
         <div className="flex items-center">
           <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex size-10 items-center justify-center" aria-label="Search">
