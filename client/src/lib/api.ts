@@ -39,6 +39,8 @@ export type ApiProduct = {
   bottomSizes?: string[];
   stockBySize?: Record<string, number>;
   customTailoringEnabled?: boolean;
+  customTailoringPrice?: number;
+  supplierInfo?: string;
   addons?: Array<{
     _id?: string;
     name: string;
