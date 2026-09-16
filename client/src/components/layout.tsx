@@ -17,6 +17,7 @@ const icons = {
   search: "/icons/search.png",
   account: "/icons/account.png",
   cart: "/icons/cart.png",
+  whatsapp: "/icons/whatsapp.png",
   sort: "/icons/sort-down.png",
 };
 
@@ -30,77 +31,65 @@ export function DesktopHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 hidden bg-white lg:block" aria-label="Desktop header">
-        <div className="relative h-[140px]">
-          <div className="flex h-[31px] items-center justify-center bg-[#EAEAEA]">
-            <nav className="flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
-              {utilityNav.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`${item.label === "CATEGORY" ? "text-[13px] tracking-[0.39px]" : ""} ${pathname.startsWith(item.href) ? "text-black" : ""}`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          <div className="relative h-[109px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.13)]">
-            <div className="flex h-[78px] items-center justify-between px-[86px] text-[12px] font-semibold text-black">
-              <div className="flex items-center gap-[52px]">
-                <div className="flex items-center gap-[1px]">
-                  <span>INR</span>
-                  <Image src={icons.sort} alt="" width={10} height={10} className="size-[10px] object-contain" />
-                </div>
-                {user ? (
-                  <Link href="/account">ACCOUNT</Link>
-                ) : (
-                  <button type="button" onClick={() => openAuth("login")}>ACCOUNT</button>
-                )}
+      <header className="relative hidden overflow-visible bg-white lg:block" aria-label="Desktop header">
+        <div className="relative flex h-[max(31px,2.15vw)] items-center justify-center bg-[#EAEAEA] text-[length:max(12px,0.83vw)] font-medium tracking-[0.36px] text-gray">
+          <nav className="flex gap-[max(32px,2.22vw)]" aria-label="Utility navigation">
+            {utilityNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={pathname.startsWith(item.href) && item.href !== "/" ? "relative font-semibold text-black" : ""}
+              >
+                {item.label}
+                {pathname.startsWith(item.href) && item.href !== "/" ? (
+                  <span className="absolute -bottom-[max(6px,0.42vw)] left-1/2 h-[2px] w-[100px] -translate-x-1/2 bg-black" />
+                ) : null}
+              </Link>
+            ))}
+          </nav>
+        </div>
+        <Link href="/" className="absolute left-[calc(50%+1px)] top-[5px] z-10 -translate-x-1/2">
+          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="h-[139px] w-[182px] object-cover" priority />
+        </Link>
+        <div className="relative h-[max(109px,7.57vw)] border-b border-gray-light shadow-[0_1px_4px_rgba(0,0,0,0.13)]">
+          <div className="flex h-[max(78px,5.41vw)] w-full items-center justify-between px-[max(40px,2.77vw)]">
+            <div className="flex items-center gap-[max(40px,2.77vw)] text-[12px] font-semibold leading-[15px] text-black">
+              <div className="flex items-center gap-[max(8px,0.55vw)]">
+                <span>INR</span>
+                <Image src={icons.sort} alt="" width={10} height={10} className="h-[10px] w-[10px]" />
               </div>
-              <div className="flex items-center gap-[20px]">
-                <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex size-[28px] items-center justify-center" aria-label="Search">
-                  <Image src={icons.search} alt="" width={28} height={28} className="size-[28px] object-contain" />
-                </button>
-                {user ? (
-                  <Link href="/account" className="inline-flex size-[28px] items-center justify-center" aria-label="Account">
-                    <Image src={icons.account} alt="" width={28} height={28} className="size-[28px] object-contain" />
-                  </Link>
-                ) : (
-                  <button type="button" onClick={() => openAuth("login")} className="inline-flex size-[28px] items-center justify-center" aria-label="Account">
-                    <Image src={icons.account} alt="" width={28} height={28} className="size-[28px] object-contain" />
-                  </button>
-                )}
-                <button type="button" onClick={openCart} className="relative inline-flex size-[28px] items-center justify-center" aria-label="Open cart">
-                  <Image src={icons.cart} alt="" width={28} height={28} className="size-[28px] object-contain" />
-                  {itemCount > 0 ? (
-                    <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white">{itemCount}</span>
-                  ) : null}
-                </button>
-              </div>
+              {user ? (
+                <Link href="/account" className="hover:underline">ACCOUNT</Link>
+              ) : (
+                <button type="button" onClick={() => openAuth("login")} className="hover:underline">ACCOUNT</button>
+              )}
             </div>
-
-            <nav className="absolute inset-x-0 bottom-[8px] z-[2] mx-auto flex w-[933px] max-w-[calc(100%-48px)] justify-between text-[12px] font-medium leading-normal text-black" aria-label="Category navigation">
-              {categoryNav.map((item) => (
-                <Link key={item.href} href={item.href} className={item.highlight ? "text-sale-nav" : "hover:text-gray"}>
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            <div className="relative z-20 flex items-center gap-[max(20px,1.38vw)]">
+              <IconButton label="Search" icon={icons.search} onClick={() => setSearchOpen(true)} className="size-7 p-0" />
+              <a
+                href="https://wa.me/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="inline-flex size-7 items-center justify-center"
+              >
+                <Image src={icons.whatsapp} alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+              </a>
+              <button type="button" onClick={openCart} className="relative inline-flex size-7 items-center justify-center" aria-label="Open cart">
+                <Image src={icons.cart} alt="" width={28} height={28} className="h-7 w-7 object-contain" />
+                {itemCount > 0 ? (
+                  <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-black text-[9px] font-bold text-white">{itemCount}</span>
+                ) : null}
+              </button>
+            </div>
           </div>
-
-          <Link href="/" className="absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2" style={{ top: 'calc(50% - 10px)' }}>
-            <Image
-              src="/logos/trilokini-footer.png"
-              alt="Trilokini"
-              width={182}
-              height={139}
-              style={{ width: '182px', height: '139px' }}
-              className="object-contain"
-              priority
-            />
-          </Link>
+          <nav className="absolute bottom-0 left-1/2 flex w-[max(933px,64.79vw)] -translate-x-1/2 justify-between px-[max(20px,1.38vw)] pb-[max(8px,0.55vw)] text-[12px] font-medium leading-[15px] text-black" aria-label="Category navigation">
+            {categoryNav.map((item) => (
+              <Link key={item.href} href={item.href} className={item.highlight ? "text-sale-nav" : "hover:text-gray"}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </header>
       <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
@@ -110,26 +99,38 @@ export function DesktopHeader() {
 
 export function MobileHeader({ onMenu }: { onMenu?: () => void }) {
   const { openCart, itemCount } = useCart();
-  const { user } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <>
-      <header className="sticky top-0 z-50 flex h-[160px] items-center justify-between border-b border-gray-light bg-white px-1 lg:hidden" aria-label="Mobile header">
-        <IconButton label="Open menu" icon={icons.menu} onClick={onMenu} className="size-10" />
-        <Link href="/">
-          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={182} height={139} className="object-contain" style={{ width: '182px', height: '139px' }} priority />
+      <header className="relative flex h-[50px] items-center justify-between bg-white px-[9px] lg:hidden" aria-label="Mobile header">
+        <button
+          type="button"
+          aria-label="Open menu"
+          onClick={onMenu}
+          className="relative z-10 inline-flex size-[20px] shrink-0 items-center justify-center"
+        >
+          <Image src={icons.menu} alt="" width={20} height={20} className="size-[20px] object-cover" />
+        </button>
+        <Link href="/" className="absolute left-1/2 top-px z-0 h-[50px] w-[118.5px] -translate-x-1/2">
+          <Image src="/logos/trilokini-header.png" alt="Trilokini" width={119} height={50} className="h-[50px] w-[118.5px] object-cover" priority />
         </Link>
-        <div className="flex items-center">
-          <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex size-10 items-center justify-center" aria-label="Search">
-            <Image src={icons.search} alt="" width={24} height={24} className="size-6 object-contain" />
+        <div className="relative z-10 flex items-center gap-[6px]">
+          <button type="button" aria-label="Search" onClick={() => setSearchOpen(true)} className="inline-flex size-[21px] items-center justify-center">
+            <Image src={icons.search} alt="" width={21} height={21} className="size-[21px] object-cover" />
           </button>
-          <Link href={user ? "/account" : "/login"} className="inline-flex size-10 items-center justify-center" aria-label="Account">
-            <Image src={icons.account} alt="" width={24} height={24} className="size-6 object-contain" />
-          </Link>
-          <button type="button" onClick={openCart} className="relative inline-flex size-10 items-center justify-center" aria-label="Open cart">
-            <Image src={icons.cart} alt="" width={24} height={24} className="size-6 object-contain" />
-            {itemCount > 0 ? <span className="absolute right-1 top-1 size-2 rounded-full bg-black" /> : null}
+          <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="inline-flex size-[21px] items-center justify-center"
+          >
+            <Image src={icons.whatsapp} alt="" width={21} height={21} className="size-[21px] object-cover" />
+          </a>
+          <button type="button" onClick={openCart} className="relative inline-flex size-[21px] items-center justify-center" aria-label="Open cart">
+            <Image src={icons.cart} alt="" width={21} height={21} className="size-[21px] object-cover" />
+            {itemCount > 0 ? <span className="absolute -right-0.5 -top-0.5 size-1.5 rounded-full bg-black" /> : null}
           </button>
         </div>
       </header>
