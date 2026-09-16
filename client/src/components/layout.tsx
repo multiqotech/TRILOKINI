@@ -199,78 +199,248 @@ export function MobileStickyNav() {
   );
 }
 
-export function NewsletterForm() {
-  const [email, setEmail] = useState("");
+export function NewsletterForm({ variant = "desktop" }: { variant?: "desktop" | "mobile" }) {
   const [status, setStatus] = useState<"idle" | "success">("idle");
+  const isMobile = variant === "mobile";
 
   return (
     <form
-      className="flex flex-col gap-3"
-      onSubmit={(e) => { e.preventDefault(); setStatus("success"); }}
+      className={isMobile ? "flex w-full flex-col items-center gap-[14px] text-center" : "flex flex-col items-center gap-[14px] text-center"}
+      onSubmit={(e) => {
+        e.preventDefault();
+        setStatus("success");
+      }}
     >
-      <label htmlFor="footer-email" className="text-[16px] font-semibold tracking-[0.64px]">KEEP IN TOUCH</label>
-      <input id="footer-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address" className="h-10 border border-black bg-white px-3 text-[13px] outline-none placeholder:text-gray" />
-      <button type="submit" className="h-9 w-[104px] border border-black bg-white text-[13px] font-semibold tracking-[0.56px]">Sign me Up</button>
+      <p
+        className={`font-medium text-black ${
+          isMobile
+            ? "max-w-[240px] text-[9px] leading-[13px] tracking-[0.36px]"
+            : "max-w-[320px] text-[9px] leading-[19px] tracking-[0.36px]"
+        }`}
+      >
+        {isMobile
+          ? "Signup to get exclusive style tips, new arrival updates and a special discount code."
+          : "Signup to get exclusive tips, new arrival updates and a special discount code."}
+      </p>
+      <button
+        type="submit"
+        className={`shrink-0 whitespace-nowrap border-[0.3px] border-black text-black ${
+          isMobile
+            ? "h-[25px] w-[78px] bg-transparent text-[10px] font-medium tracking-[0.2px]"
+            : "h-9 w-[104px] bg-white text-[14px] font-semibold tracking-[0.56px]"
+        }`}
+      >
+        Sign me Up
+      </button>
       {status === "success" ? <p className="text-[12px] text-gray">Thank you for subscribing!</p> : null}
     </form>
+  );
+}
+
+const socialLinks = [
+  { href: "https://facebook.com", src: "/icons/facebook.svg", label: "Facebook" },
+  { href: "https://instagram.com", src: "/icons/instagram.svg", label: "Instagram" },
+  { href: "https://twitter.com", src: "/icons/twitter.svg", label: "X" },
+  { href: "https://pinterest.com", src: "/icons/pinterest.svg", label: "Pinterest" },
+  { href: "https://youtube.com", src: "/icons/youtube.png", label: "YouTube" },
+];
+
+function SocialRow({ className = "" }: { className?: string }) {
+  return (
+    <div className={`flex items-center gap-[15px] ${className}`}>
+      {socialLinks.map((item) => (
+        <a
+          key={item.label}
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={item.label}
+          className="inline-flex size-[18px] items-center justify-center"
+        >
+          <Image src={item.src} alt="" width={18} height={18} className="size-[18px] object-contain" />
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function PaymentMarks({ compact = false }: { compact?: boolean }) {
+  const count = compact ? 2 : 3;
+  return (
+    <div className={`mt-1 flex items-center ${compact ? "justify-center" : ""}`}>
+      {Array.from({ length: count }).map((_, index) => (
+        <div key={index} className="flex items-center">
+          <Image
+            src="/payments/visa.png"
+            alt="Visa"
+            width={compact ? 30 : 40}
+            height={compact ? 12 : 16}
+            className={compact ? "h-3 w-[30px] object-contain" : "h-4 w-10 object-contain"}
+          />
+          <Image
+            src="/payments/mastercard.svg"
+            alt="Mastercard"
+            width={compact ? 40 : 60}
+            height={compact ? 30 : 40}
+            className={compact ? "h-[30px] w-10 object-contain" : "h-10 w-[60px] object-contain"}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ContactBlock() {
+  return (
+    <div className="text-[14px] text-[#757575]">
+      <a href="mailto:care@offstore.com" className="underline">
+        care@offstore.com
+      </a>
+      <p className="mt-[18px] leading-6">
+        Call us at: 1800-120-000-520 (India)/
+        <br />
+        +91 8000000001 (International)
+        <br />
+        10 am - 7 pm, Monday - Saturday
+      </p>
+    </div>
+  );
+}
+
+function CopyrightLine() {
+  return (
+    <div className="flex items-center justify-center gap-[6px] font-display text-[16px] leading-none text-black">
+      <Image src="/icons/copyright.png" alt="" width={16} height={16} className="size-4 object-contain" />
+      <span>2026 Offstore Fashions Ltd. All rights reserved.</span>
+    </div>
   );
 }
 
 export function Footer() {
   return (
     <footer className="bg-white" aria-label="Footer">
-      <div className="relative overflow-hidden border-t border-black/20 bg-footer-wash px-6 py-8 lg:px-[75px] lg:py-7">
-        <div className="pointer-events-none absolute inset-0 opacity-20">
-          <Image src="/logos/trilokini-footer.png" alt="" fill className="object-cover" />
+      {/* Desktop — Figma 9:806 */}
+      <div className="relative hidden lg:block" style={{ background: "rgba(234,234,234,0.67)" }}>
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/2 top-1/2 h-[1440px] w-[800px] -translate-x-1/2 -translate-y-1/2 rotate-90">
+            <Image src="/logos/footer-pattern-desktop.png" alt="" fill sizes="1440px" className="object-cover opacity-[0.65]" />
+          </div>
         </div>
-        <div className="relative mx-auto max-w-[1290px]">
-          <div className="hidden grid-cols-5 border-b border-black/20 pb-5 lg:grid">
-            {Object.entries(footerLinks).map(([title, links]) => (
-              <div key={title}>
-                <h2 className="mb-5 text-[14px] font-semibold tracking-[0.56px]">{title}</h2>
-                <ul className="space-y-4 text-[14px] leading-5 text-gray">
-                  {links.map((link) => (
-                    <li key={link.label}><Link href={link.href}>{link.label}</Link></li>
-                  ))}
-                </ul>
+
+        <div className="relative mx-auto w-full max-w-[1440px] px-[75px] pb-[40px] pt-[48px]">
+          {/* Wordmark sits on the top rule (Figma overlap) */}
+          <div className="pointer-events-none absolute left-[75px] top-[28px] z-10 w-[180px]">
+            <Image
+              src="/logos/trilokini-footer-mark.png"
+              alt="Trilokini"
+              width={180}
+              height={40}
+              className="h-auto w-[180px] object-contain"
+              priority={false}
+            />
+          </div>
+
+          <div className="border-t border-black pt-[28px]">
+            <div className="grid grid-cols-5 gap-x-[48px] border-b border-black pb-[48px]">
+              {Object.entries(footerLinks).map(([title, links]) => (
+                <div key={title}>
+                  <h2 className="mb-[28px] text-[14px] font-semibold tracking-[0.56px] text-black">{title}</h2>
+                  <ul className="space-y-[20px] text-[14px] leading-5 text-[#757575]">
+                    {links.map((link) => (
+                      <li key={link.label}>
+                        <Link href={link.href} className="hover:text-black">
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <div>
+                <h2 className="mb-[28px] text-[14px] font-semibold tracking-[0.56px] text-black">CONTACT</h2>
+                <ContactBlock />
+                <h2 className="mb-[16px] mt-[32px] text-[14px] font-semibold tracking-[0.56px] text-black">KEEP IN TOUCH</h2>
+                <SocialRow />
               </div>
-            ))}
-            <div>
-              <h2 className="mb-5 text-[14px] font-semibold tracking-[0.56px]">CONTACT</h2>
-              <a href="mailto:customercare@trilokini.com" className="text-[14px] text-gray underline">customercare@trilokini.com</a>
-              <p className="mt-4 max-w-[256px] text-[14px] leading-6 text-gray">
-                Call us at: 1800-120-000-520 (India) / +91 8000000001 (International)<br />
-                10 am - 7 pm, Monday - Saturday
-              </p>
+            </div>
+
+            <div className="relative grid grid-cols-2 items-start border-b border-black py-[30px]">
+              <div className="absolute left-1/2 top-[30px] h-[93px] w-px -translate-x-1/2 bg-black" />
+              <div className="max-w-[500px] pr-12">
+                <h2 className="text-[16px] font-semibold tracking-[0.64px] text-black">COMPLETELY SAFE AND SECURE PAYMENT METHOD</h2>
+                <p className="mt-[8px] text-[9px] font-semibold tracking-[0.36px] text-black">
+                  We accept Netbanking, all major credit cards. We also accept orders with cash payment.
+                </p>
+                <PaymentMarks />
+              </div>
+              <div className="flex justify-center pt-[10px]">
+                <NewsletterForm variant="desktop" />
+              </div>
+            </div>
+
+            <div className="pt-[16px]">
+              <CopyrightLine />
             </div>
           </div>
-          <div className="lg:hidden">
+        </div>
+      </div>
+
+      {/* Mobile — Figma 9:12 */}
+      <div className="relative overflow-hidden bg-white shadow-[0_-4px_4px_rgba(0,0,0,0.25)] lg:hidden">
+        <div className="pointer-events-none absolute inset-0">
+          <Image src="/logos/footer-pattern-mobile.png" alt="" fill sizes="405px" className="object-cover object-top opacity-[0.6]" />
+        </div>
+
+        <div className="relative px-[28px] pb-[28px] pt-[10px]">
+          <div className="flex flex-col items-center">
+            <Image
+              src="/logos/trilokini-footer-mark.png"
+              alt="Trilokini"
+              width={140}
+              height={31}
+              className="h-auto w-[140px] object-contain"
+            />
+            <div className="mt-[16px] w-full">
+              <NewsletterForm variant="mobile" />
+            </div>
+          </div>
+
+          <div className="mt-[28px]">
             {Object.entries(footerLinks).map(([title, links]) => (
-              <Accordion key={title} title={title}>
+              <Accordion key={title} title={title} className="-mx-[28px] px-[28px]">
                 <ul className="space-y-2">
                   {links.map((link) => (
-                    <li key={link.label}><Link href={link.href}>{link.label}</Link></li>
+                    <li key={link.label}>
+                      <Link href={link.href}>{link.label}</Link>
+                    </li>
                   ))}
                 </ul>
               </Accordion>
             ))}
-            <Accordion title="CONTACT">
-              <a href="mailto:customercare@trilokini.com">customercare@trilokini.com</a>
-              <p className="mt-3">1800 120 000 520 (India)</p>
-            </Accordion>
           </div>
-          <div className="grid gap-8 border-b border-black/20 py-8 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <h2 className="text-[16px] font-semibold tracking-[0.64px]">COMPLETELY SAFE AND SECURE PAYMENT METHOD</h2>
-              <p className="mt-2 text-[9px] text-gray">We accept Netbanking, all major credit cards. We also accept orders with cash payment.</p>
-              <div className="mt-3 flex gap-3">
-                <Image src="/payments/visa.png" alt="Visa" width={40} height={16} />
-                <Image src="/payments/mastercard.svg" alt="Mastercard" width={60} height={40} />
-              </div>
+
+          <div className="-mx-[28px] border-t border-black px-[28px] pt-[14px]">
+            <h2 className="mb-[16px] text-[14px] font-semibold tracking-[0.56px] text-black">CONTACT</h2>
+            <ContactBlock />
+            <h2 className="mb-[16px] mt-[24px] text-[14px] font-semibold tracking-[0.56px] text-black">KEEP IN TOUCH</h2>
+            <SocialRow className="justify-center" />
+          </div>
+
+          <div className="mx-auto mt-[20px] w-[calc(100%+0px)] max-w-[352px] border-t border-black pt-[18px] text-center">
+            <h2 className="text-[12px] font-semibold tracking-[0.48px] text-black">
+              COMPLETELY SAFE AND SECURE PAYMENT METHOD
+            </h2>
+            <p className="mt-[4px] text-[7px] font-semibold tracking-[0.28px] text-black">
+              We accept Netbanking, all major credit cards. We also accept orders with cash payment.
+            </p>
+            <div className="mt-[2px]">
+              <PaymentMarks compact />
             </div>
-            <NewsletterForm />
           </div>
-          <div className="flex justify-center pt-5 font-display text-[16px] lg:pt-8">© 2026 Offstore Fashions Ltd. All rights reserved.</div>
+
+          <div className="mx-auto mt-[12px] max-w-[352px] border-t border-black pt-[12px]">
+            <CopyrightLine />
+          </div>
         </div>
       </div>
     </footer>

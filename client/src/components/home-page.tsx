@@ -281,15 +281,12 @@ function HomeContent({ data }: { data: HomePageData }) {
           ))
         )}
         
-        <section className="space-y-5">
-          <SectionHeading title="CUSTOM LAYOUT" />
-          <div className="relative mx-1 aspect-[391/210] w-full overflow-hidden bg-gray-light lg:mx-6 lg:aspect-[1920/480]">
-            <Image src={`${home}/desktop-hero.png`} alt="Clothing" fill className="hidden object-cover lg:block" />
-            <Image src={`${home}/mobile-custom-layout.png`} alt="Clothing" fill className="object-cover lg:hidden" />
+        <section className="space-y-0">
+          <div className="px-6 pb-5 lg:pb-0">
+            <SectionHeading title="CUSTOM LAYOUT" />
           </div>
-          <div className="px-[5px] lg:px-6">
-            <ProductGrid products={staticProducts} />
-          </div>
+          <HomeHero banners={data?.banners} />
+          <CategoryStrip categories={data?.categories} />
         </section>
         
         <section className="px-1 lg:px-6">

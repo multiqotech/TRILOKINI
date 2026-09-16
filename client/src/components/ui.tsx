@@ -27,23 +27,31 @@ type AccordionProps = {
   title: string;
   children: React.ReactNode;
   defaultOpen?: boolean;
+  className?: string;
 };
 
-export function Accordion({ title, children, defaultOpen = false }: AccordionProps) {
+export function Accordion({ title, children, defaultOpen = false, className = "" }: AccordionProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-t border-black/20">
+    <div className={`border-t border-black ${className}`}>
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between py-4 text-left text-[14px] font-semibold tracking-[0.56px]"
+        className="flex h-[51px] w-full items-center justify-between text-left text-[14px] font-semibold tracking-[0.56px]"
       >
         <span>{title}</span>
-        <span aria-hidden className="text-lg font-normal leading-none">{open ? "-" : "+"}</span>
+        <Image
+          src="/icons/chevron-down.png"
+          alt=""
+          width={14}
+          height={14}
+          aria-hidden
+          className={`size-[14px] object-contain transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
-      {open ? <div className="pb-4 text-[14px] leading-6 text-gray">{children}</div> : null}
+      {open ? <div className="pb-4 text-[14px] leading-6 text-[#757575]">{children}</div> : null}
     </div>
   );
 }
