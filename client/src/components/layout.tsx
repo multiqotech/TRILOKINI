@@ -321,8 +321,8 @@ export function Footer() {
     <footer className="bg-white" aria-label="Footer">
       {/* Desktop — Figma 9:806 */}
       <div className="relative hidden overflow-hidden lg:block" style={{ background: "rgba(234,234,234,0.67)" }}>
-        {/* Landscape pattern baked to Figma framing (1440×797), clipped to footer */}
-        <div className="pointer-events-none absolute inset-0">
+        {/* Landscape pattern stays above the footer bottom edge */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[78px]">
           <Image
             src="/logos/footer-pattern-desktop-wide.png"
             alt=""
@@ -335,7 +335,7 @@ export function Footer() {
 
         <div className="relative mx-auto w-full max-w-[1440px] px-[75px] pb-[40px] pt-[24px]">
           {/* Logo rests on the top rule */}
-          <div className="relative z-10 mb-[-10px] w-[180px]">
+          <div className="relative z-10 mb-[15px] w-[180px]">
             <Image
               src="/logos/trilokini-footer-mark.png"
               alt="Trilokini"
@@ -346,7 +346,7 @@ export function Footer() {
             />
           </div>
 
-          <div className="border-t border-black pt-[28px]">
+          <div className="border-t border-black pt-[18px]">
             <div className="grid grid-cols-5 gap-x-[48px] border-b border-black pb-[48px]">
               {Object.entries(footerLinks).map(([title, links]) => (
                 <div key={title}>
@@ -393,7 +393,7 @@ export function Footer() {
 
       {/* Mobile — Figma 9:12 */}
       <div className="relative overflow-hidden bg-white shadow-[0_-4px_4px_rgba(0,0,0,0.25)] lg:hidden">
-        <div className="pointer-events-none absolute inset-0">
+        <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[78px]">
           <Image src="/logos/footer-pattern-mobile.png" alt="" fill sizes="405px" className="object-cover object-top opacity-[0.6]" />
         </div>
 
