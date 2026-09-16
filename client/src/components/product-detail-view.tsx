@@ -2,12 +2,10 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { Heart, Share2 } from "lucide-react";
 import { ProductCarousel } from "@/components/commerce";
 import { CustomTailoredModal } from "@/components/custom-tailored-modal";
 import { PromoBanner } from "@/components/states";
 import { SizeSelectModal } from "@/components/size-select-modal";
-import { Accordion } from "@/components/ui";
 import { resolveImage } from "@/lib/images";
 import { formatPrice, productToCard } from "@/lib/services/products";
 import type { Product, ProductAddon } from "@/lib/types";
@@ -44,10 +42,26 @@ function SizeButton({
   );
 }
 
+const THUMB_W = 78;
+const THUMB_H = 117;
+const THUMB_GAP = 15;
+const THUMBS_VISIBLE = 6;
+const THUMB_STEP = THUMB_W + THUMB_GAP;
+const THUMB_TRACK = THUMBS_VISIBLE * THUMB_W + (THUMBS_VISIBLE - 1) * THUMB_GAP;
+
 function ProductImageGallery({ images, alt }: { images: string[]; alt: string }) {
   const [active, setActive] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
   const displayImages = images.length > 0 ? images : [resolveImage()];
+  const showThumbNav = displayImages.length >= THUMBS_VISIBLE;
+  const thumbTrackWidth = showThumbNav
+    ? THUMB_TRACK
+    : displayImages.length * THUMB_W + Math.max(0, displayImages.length - 1) * THUMB_GAP;
+
+  const scrollThumbs = (dir: number) => {
+    thumbRef.current?.scrollBy({ left: dir * THUMB_STEP, behavior: "smooth" });
+  };
 
   return (
     <div>
@@ -85,18 +99,46 @@ function ProductImageGallery({ images, alt }: { images: string[]; alt: string })
             </div>
           ))}
         </div>
-        {displayImages.length > 1 ? (
-          <div className="mt-3 flex gap-3 overflow-x-auto pb-1">
-            {displayImages.map((src, index) => (
-              <button
-                key={`${src}-thumb-${index}`}
-                type="button"
-                onClick={() => setActive(index)}
-                className={`relative size-[78px] min-w-[78px] shrink-0 overflow-hidden border ${active === index ? "border-black" : "border-transparent"}`}
+        {displayImages.length > 0 ? (
+          <div className="relative mt-5 flex justify-center">
+            <div className="relative" style={{ width: thumbTrackWidth, height: THUMB_H }}>
+              <div
+                ref={thumbRef}
+                className="flex h-[117px] overflow-x-auto"
+                style={{ width: thumbTrackWidth, gap: THUMB_GAP, scrollbarWidth: "none" }}
               >
-                <Image src={src} alt={`${alt} thumbnail ${index + 1}`} fill className="object-cover" />
-              </button>
-            ))}
+                {displayImages.map((src, index) => (
+                  <button
+                    key={`${src}-thumb-${index}`}
+                    type="button"
+                    onClick={() => setActive(index)}
+                    className="relative h-[117px] w-[78px] min-h-[117px] min-w-[78px] shrink-0 overflow-hidden bg-gray-light"
+                  >
+                    <Image src={src} alt={`${alt} thumbnail ${index + 1}`} fill className="object-cover" />
+                  </button>
+                ))}
+              </div>
+              {showThumbNav ? (
+                <>
+                  <button
+                    type="button"
+                    aria-label="Previous thumbnails"
+                    onClick={() => scrollThumbs(-1)}
+                    className="absolute left-0 top-0 z-10 flex h-[117px] w-[23px] items-center justify-center bg-[#e5e5e5]/80"
+                  >
+                    <Image src="/icons/dropdown.png" alt="" width={24} height={24} className="size-6 rotate-90 object-contain" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Next thumbnails"
+                    onClick={() => scrollThumbs(1)}
+                    className="absolute right-0 top-0 z-10 flex h-[117px] w-[23px] items-center justify-center bg-[#e5e5e5]/80"
+                  >
+                    <Image src="/icons/dropdown.png" alt="" width={24} height={24} className="size-6 -rotate-90 object-contain" />
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
         ) : null}
       </div>
@@ -204,6 +246,19 @@ export function ProductDetailView({ product, relatedProducts, onAddToCart, onBuy
     return stock !== undefined && stock <= 0;
   };
 
+  const shareProduct = async () => {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product.title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
+
   return (
     <div className="mx-auto max-w-[1440px]">
       <div className="grid gap-0 lg:grid-cols-[minmax(0,685px)_1fr] lg:gap-10 lg:px-6 lg:pt-6">
@@ -213,36 +268,39 @@ export function ProductDetailView({ product, relatedProducts, onAddToCart, onBuy
 
         <div className="px-[5px] pt-4 lg:px-0 lg:pt-0">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-[18px] font-semibold uppercase tracking-[0.9px] lg:text-[24px] lg:tracking-[0.72px]">
+            <div className="min-w-0">
+              <p className="text-[24px] font-semibold leading-normal tracking-[0.72px] text-black">
                 {product.designerName}
               </p>
-              <h1 className="mt-1 text-[14px] tracking-[0.7px] text-gray lg:text-[14px]">
+              <h1 className="mt-[13px] text-[14px] font-normal leading-normal tracking-[0.7px] text-gray">
                 {product.title}
               </h1>
             </div>
-            <div className="flex shrink-0 gap-2">
-              <button type="button" aria-label="Share product" className="flex size-8 items-center justify-center">
-                <Share2 size={20} />
+            <div className="flex shrink-0 items-center gap-[10px]">
+              <button type="button" aria-label="Share product" onClick={shareProduct} className="flex size-8 items-center justify-center">
+                <Image src="/icons/share.png" alt="" width={32} height={32} className="size-8 object-contain" />
               </button>
               <button type="button" aria-label="Add to wishlist" className="flex size-8 items-center justify-center">
-                <Heart size={20} />
+                <Image src="/icons/heart.png" alt="" width={32} height={32} className="size-8 object-contain" />
               </button>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-baseline gap-3">
-            <span className="text-[18px] font-semibold tracking-[0.9px] text-gray lg:text-[18px]">
+          <div className="mt-9 flex flex-wrap items-baseline gap-x-6">
+            <span className="text-[18px] font-semibold leading-normal tracking-[0.9px] text-gray">
               {formatPrice(price)}
             </span>
             {product.previousPrice ? (
-              <del className="text-[14px] tracking-[0.7px] text-gray-light">{formatPrice(product.previousPrice)}</del>
+              <span className="relative text-[14px] font-semibold leading-normal tracking-[0.7px] text-gray-light">
+                {formatPrice(product.previousPrice)}
+                <span className="absolute left-0 top-1/2 h-px w-full bg-gray-light" aria-hidden />
+              </span>
             ) : null}
             {product.discountPercentage ? (
-              <span className="text-[14px] text-sale">{product.discountPercentage}% Off</span>
+              <span className="text-[14px] font-normal tracking-[0.7px] text-sale">{product.discountPercentage}% Off</span>
             ) : null}
           </div>
-          <p className="mt-1 text-[13px] tracking-[0.65px] text-gray">Inclusive of all taxes</p>
+          <p className="mt-3 text-[13px] font-normal leading-normal tracking-[0.65px] text-gray">Inclusive of all taxes</p>
 
           <div className="my-5 border-t border-gray-light" />
 
