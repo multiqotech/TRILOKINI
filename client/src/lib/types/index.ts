@@ -47,6 +47,7 @@ export type FilterGroup = {
 
 export type ProductListParams = {
   category?: string;
+  tag?: string;
   search?: string;
   sort?: string;
   page?: number;

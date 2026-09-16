@@ -11,12 +11,13 @@ import type { FilterGroup, ProductListResult } from "@/lib/types";
 
 type Props = {
   category?: string;
+  tag?: string;
   search?: string;
   sort?: string;
   page?: number;
 };
 
-export function ProductListingView({ category, search, sort = "Popular", page = 1 }: Props) {
+export function ProductListingView({ category, tag, search, sort = "Popular", page = 1 }: Props) {
   const searchParams = useSearchParams();
   const [data, setData] = useState<ProductListResult | null>(null);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -27,10 +28,10 @@ export function ProductListingView({ category, search, sort = "Popular", page = 
 
   useEffect(() => {
     setLoading(true);
-    getProductList({ category, search, sort: sortValue, page, filters: selectedFilters })
+    getProductList({ category, tag, search, sort: sortValue, page, filters: selectedFilters })
       .then(setData)
       .finally(() => setLoading(false));
-  }, [category, search, sortValue, page, selectedFilters]);
+  }, [category, tag, search, sortValue, page, selectedFilters]);
 
   const filterGroups: FilterGroup[] = data?.filterGroups ?? [];
   const filterCount = useMemo(() => Object.values(selectedFilters).reduce((t, v) => t + v.length, 0), [selectedFilters]);

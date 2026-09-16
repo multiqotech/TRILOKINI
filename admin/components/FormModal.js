@@ -188,7 +188,7 @@ export default function FormModal({ isOpen, onClose, title, fields, initialData 
                   handleChange(field.name, next);
                 }} className="admin-input" />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-medium mb-1.5 block">Current price *</label>
                   <input type="number" required value={variant.currentPrice || ""} onChange={(e) => {
@@ -202,6 +202,14 @@ export default function FormModal({ isOpen, onClose, title, fields, initialData 
                   <input type="number" value={variant.previousPrice || ""} onChange={(e) => {
                     const next = [...formData[field.name]];
                     next[index].previousPrice = e.target.value ? Number(e.target.value) : undefined;
+                    handleChange(field.name, next);
+                  }} className="admin-input" />
+                </div>
+                <div>
+                  <label className="text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-medium mb-1.5 block">Discount (%)</label>
+                  <input type="number" value={variant.discountPercentage || ""} onChange={(e) => {
+                    const next = [...formData[field.name]];
+                    next[index].discountPercentage = e.target.value ? Number(e.target.value) : undefined;
                     handleChange(field.name, next);
                   }} className="admin-input" />
                 </div>

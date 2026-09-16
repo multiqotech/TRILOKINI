@@ -9,10 +9,11 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 function ProductsContent({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) {
   const category = typeof searchParams.category === "string" ? searchParams.category : undefined;
+  const tag = typeof searchParams.tag === "string" ? searchParams.tag : undefined;
   const search = typeof searchParams.q === "string" ? searchParams.q : typeof searchParams.search === "string" ? searchParams.search : undefined;
   const sort = typeof searchParams.sort === "string" ? searchParams.sort : "Popular";
   const page = typeof searchParams.page === "string" ? Number(searchParams.page) : 1;
-  return <ProductListingView category={category} search={search} sort={sort} page={page} />;
+  return <ProductListingView category={category} tag={tag} search={search} sort={sort} page={page} />;
 }
 
 export default async function ProductsPage({ searchParams }: { searchParams: SearchParams }) {

@@ -1,3 +1,4 @@
+import { productMatchesTag } from "@/lib/tags";
 import type { FilterGroup, Product, ProductListParams, ProductListResult } from "@/lib/types";
 
 const home = "/images/home";
@@ -112,11 +113,15 @@ function matchesPrice(product: Product, priceFilters: string[]): boolean {
 }
 
 export function getMockProductList(params: ProductListParams = {}): ProductListResult {
-  const { category, search, sort, page = 1, limit = 12, filters = {} } = params;
+  const { category, tag, search, sort, page = 1, limit = 12, filters = {} } = params;
   let items = [...mockProducts];
 
   if (category && category !== "all") {
-    items = items.filter((p) => p.categoryId === category || p.tags?.includes(category));
+    items = items.filter((p) => p.categoryId === category || productMatchesTag(p.tags, category));
+  }
+
+  if (tag) {
+    items = items.filter((p) => productMatchesTag(p.tags, tag));
   }
 
   if (search) {

@@ -5,6 +5,7 @@ import { PageShell, ContentContainer } from "@/components/templates/page-shell";
 import { Breadcrumbs } from "@/components/page-chrome";
 import { getActiveCollections } from "@/lib/api";
 import { resolveImage } from "@/lib/images";
+import { collectionProductsHref } from "@/lib/tags";
 import type { Collection, CollectionImage } from "@/lib/api";
 
 function imageAt(images: CollectionImage[] | undefined, position: number): string {
@@ -23,6 +24,7 @@ const tileLayout = [
 
 function CollectionDetailContent({ collection }: { collection: Collection }) {
   const images = collection.images || [];
+  const productsHref = collectionProductsHref(collection.title);
 
   return (
     <ContentContainer className="py-6 lg:py-10">
@@ -33,14 +35,14 @@ function CollectionDetailContent({ collection }: { collection: Collection }) {
       <h1 className="mb-6 text-[18px] font-semibold uppercase tracking-[0.72px] lg:text-[24px]">{collection.title}</h1>
       <div className="grid grid-cols-2 gap-2 lg:hidden">
         {tileLayout.map((tile) => (
-          <Link key={tile.position} href={images.find((i) => i.position === tile.position)?.href || "/products"} className={`relative block overflow-hidden bg-gray-light ${tile.mobile}`}>
+          <Link key={tile.position} href={productsHref} className={`relative block overflow-hidden bg-gray-light ${tile.mobile}`}>
             <Image src={imageAt(images, tile.position)} alt="" fill className="object-cover" />
           </Link>
         ))}
       </div>
       <div className="hidden grid-cols-4 items-stretch gap-x-5 gap-y-[29px] lg:grid">
         {tileLayout.map((tile) => (
-          <Link key={tile.position} href={images.find((i) => i.position === tile.position)?.href || "/products"} className={`relative block overflow-hidden bg-gray-light ${tile.desktop}`}>
+          <Link key={tile.position} href={productsHref} className={`relative block overflow-hidden bg-gray-light ${tile.desktop}`}>
             <Image src={imageAt(images, tile.position)} alt="" fill className="object-cover" />
           </Link>
         ))}

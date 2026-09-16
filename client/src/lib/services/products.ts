@@ -2,6 +2,7 @@ import type { ApiProduct } from "@/lib/api";
 import { getProductById as apiGetProductById, getProducts as apiGetProducts } from "@/lib/api";
 import { resolveImage } from "@/lib/images";
 import { getMockProductList, getMockRelatedProducts } from "@/lib/mocks/products";
+import { productMatchesTag } from "@/lib/tags";
 import type { Product, ProductListParams, ProductListResult } from "@/lib/types";
 
 const DEFAULT_SIZES = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"];
@@ -64,8 +65,11 @@ export async function getProductList(params: ProductListParams = {}): Promise<Pr
 
       if (params.category) {
         products = products.filter(
-          (p) => p.categoryId === params.category || p.tags?.includes(params.category!)
+          (p) => p.categoryId === params.category || productMatchesTag(p.tags, params.category)
         );
+      }
+      if (params.tag) {
+        products = products.filter((p) => productMatchesTag(p.tags, params.tag!));
       }
       if (params.search) {
         const q = params.search.toLowerCase();

@@ -71,22 +71,31 @@ const productSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 productSchema.pre('save', function() {
-  if (this.previousPrice && this.currentPrice && this.previousPrice > this.currentPrice) {
+  if (this.previousPrice && this.currentPrice && this.previousPrice > this.currentPrice && (this.discountPercentage == null || this.discountPercentage === '')) {
     this.discountPercentage = Math.round(((this.previousPrice - this.currentPrice) / this.previousPrice) * 100);
   }
 
   if (this.variants && this.variants.length > 0) {
     this.variants.forEach(variant => {
-      if (variant.previousPrice && variant.currentPrice && variant.previousPrice > variant.currentPrice) {
+      if (variant.previousPrice && variant.currentPrice && variant.previousPrice > variant.currentPrice && (variant.discountPercentage == null || variant.discountPercentage === '')) {
         variant.discountPercentage = Math.round(((variant.previousPrice - variant.currentPrice) / variant.previousPrice) * 100);
       }
     });
 
     const primaryVariant = this.variants[0];
-    this.currentPrice = primaryVariant.currentPrice;
-    this.previousPrice = primaryVariant.previousPrice;
-    this.discountPercentage = primaryVariant.discountPercentage;
-    if (primaryVariant.images && primaryVariant.images.length > 0) {
+    if (this.currentPrice != null) primaryVariant.currentPrice = this.currentPrice;
+    else this.currentPrice = primaryVariant.currentPrice;
+
+    if (this.previousPrice != null) primaryVariant.previousPrice = this.previousPrice;
+    else this.previousPrice = primaryVariant.previousPrice;
+
+    if (this.discountPercentage != null) primaryVariant.discountPercentage = this.discountPercentage;
+    else this.discountPercentage = primaryVariant.discountPercentage;
+
+    if (this.imageUrl) {
+      const images = Array.isArray(primaryVariant.images) ? primaryVariant.images.filter(Boolean) : [];
+      primaryVariant.images = [this.imageUrl, ...images.filter((url) => url !== this.imageUrl)];
+    } else if (primaryVariant.images && primaryVariant.images.length > 0) {
       this.imageUrl = primaryVariant.images[0];
     }
   }

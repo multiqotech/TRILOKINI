@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Footer, ResponsiveShell } from "./layout";
 import type { Collection, CollectionImage } from "@/lib/api";
+import { collectionProductsHref } from "@/lib/tags";
 
 const PLACEHOLDER = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 
@@ -48,15 +49,12 @@ function CollectionSection({ collection }: { collection: Collection }) {
     { position: 6, mobile: "col-span-2 aspect-[391/288]", desktop: "col-span-2 col-start-3 aspect-[686/506]" },
   ];
 
-  const getHref = (position: number) => {
-    const match = images?.find((img) => Number(img.position) === position);
-    return match?.href || `/collections/${collection._id}`;
-  };
+  const productsHref = collectionProductsHref(title);
 
   return (
     <section className="space-y-1.5 lg:space-y-2.5">
       <h2 className="px-[5px] text-[14px] font-medium leading-[18px] tracking-[0.42px] lg:px-6 lg:text-[24px] lg:leading-8 lg:tracking-[0.72px]">
-        <Link href={`/collections/${collection._id}`} className="hover:underline">{title}</Link>
+        <Link href={productsHref} className="hover:underline">{title}</Link>
       </h2>
 
       <div className="grid grid-cols-2 gap-2 px-[5px] lg:hidden">
@@ -66,7 +64,7 @@ function CollectionSection({ collection }: { collection: Collection }) {
             src={imageAt(images, tile.position)}
             alt={`${title} ${tile.position}`}
             className={tile.mobile}
-            href={getHref(tile.position)}
+            href={productsHref}
           />
         ))}
       </div>
@@ -78,7 +76,7 @@ function CollectionSection({ collection }: { collection: Collection }) {
             src={imageAt(images, tile.position)}
             alt={`${title} ${tile.position}`}
             className={tile.desktop}
-            href={getHref(tile.position)}
+            href={productsHref}
           />
         ))}
       </div>
