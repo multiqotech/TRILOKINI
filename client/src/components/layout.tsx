@@ -224,10 +224,10 @@ export function NewsletterForm({ variant = "desktop" }: { variant?: "desktop" | 
       </p>
       <button
         type="submit"
-        className={`shrink-0 whitespace-nowrap border-[0.3px] border-black text-black ${
+        className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap border-[0.3px] border-black leading-none text-black ${
           isMobile
-            ? "h-[25px] w-[78px] bg-transparent text-[10px] font-medium tracking-[0.2px]"
-            : "h-9 w-[104px] bg-white text-[14px] font-semibold tracking-[0.56px]"
+            ? "h-[28px] min-w-[86px] bg-transparent px-3 text-[10px] font-medium tracking-[0.2px]"
+            : "h-9 min-w-[104px] bg-white px-3 text-[14px] font-semibold tracking-[0.56px]"
         }`}
       >
         Sign me Up
@@ -320,22 +320,28 @@ export function Footer() {
   return (
     <footer className="bg-white" aria-label="Footer">
       {/* Desktop — Figma 9:806 */}
-      <div className="relative hidden lg:block" style={{ background: "rgba(234,234,234,0.67)" }}>
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute left-1/2 top-1/2 h-[1440px] w-[800px] -translate-x-1/2 -translate-y-1/2 rotate-90">
-            <Image src="/logos/footer-pattern-desktop.png" alt="" fill sizes="1440px" className="object-cover opacity-[0.65]" />
-          </div>
+      <div className="relative hidden overflow-hidden lg:block" style={{ background: "rgba(234,234,234,0.67)" }}>
+        {/* Landscape pattern baked to Figma framing (1440×797), clipped to footer */}
+        <div className="pointer-events-none absolute inset-0">
+          <Image
+            src="/logos/footer-pattern-desktop-wide.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
+            priority={false}
+          />
         </div>
 
-        <div className="relative mx-auto w-full max-w-[1440px] px-[75px] pb-[40px] pt-[48px]">
-          {/* Wordmark sits on the top rule (Figma overlap) */}
-          <div className="pointer-events-none absolute left-[75px] top-[28px] z-10 w-[180px]">
+        <div className="relative mx-auto w-full max-w-[1440px] px-[75px] pb-[40px] pt-[24px]">
+          {/* Logo rests on the top rule */}
+          <div className="relative z-10 mb-[-10px] w-[180px]">
             <Image
               src="/logos/trilokini-footer-mark.png"
               alt="Trilokini"
               width={180}
               height={40}
-              className="h-auto w-[180px] object-contain"
+              className="block h-auto w-[180px] object-contain object-left"
               priority={false}
             />
           </div>
