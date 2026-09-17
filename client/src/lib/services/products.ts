@@ -64,8 +64,9 @@ export async function getProductList(params: ProductListParams = {}): Promise<Pr
       const mockResult = getMockProductList(params);
 
       if (params.category) {
+        const category = params.category;
         products = products.filter(
-          (p) => p.categoryId === params.category || productMatchesTag(p.tags, params.category)
+          (p) => p.categoryId === category || productMatchesTag(p.tags, category)
         );
       }
       if (params.tag) {
