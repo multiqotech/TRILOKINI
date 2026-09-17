@@ -33,7 +33,7 @@ export function DesktopHeader() {
     <>
       <header className="relative sticky top-0 z-50 hidden overflow-visible bg-white lg:block" aria-label="Desktop header">
         <div className="flex h-[31px] items-center justify-center bg-[#EAEAEA]">
-          <nav className="flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
+          <nav className="relative z-40 flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
             {utilityNav.map((item) => (
               <Link
                 key={item.href}
