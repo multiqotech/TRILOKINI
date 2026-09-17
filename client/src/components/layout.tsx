@@ -30,8 +30,9 @@ export function DesktopHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
 
 
-
   
+
+
   return (
     <>
       <header className="relative sticky top-0 z-50 hidden overflow-visible bg-white lg:block" aria-label="Desktop header">
