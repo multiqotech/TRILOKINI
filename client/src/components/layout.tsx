@@ -31,7 +31,7 @@ export function DesktopHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 hidden overflow-hidden bg-white lg:block" aria-label="Desktop header">
+      <header className="relative sticky top-0 z-50 hidden overflow-visible bg-white lg:block" aria-label="Desktop header">
         <div className="flex h-[31px] items-center justify-center bg-[#EAEAEA]">
           <nav className="flex items-center gap-[26px] text-[12px] font-semibold tracking-[0.36px] text-[#757575]" aria-label="Utility navigation">
             {utilityNav.map((item) => (
@@ -46,7 +46,18 @@ export function DesktopHeader() {
           </nav>
         </div>
 
-        <div className="relative h-[109px] bg-white shadow-[0_1px_4px_rgba(0,0,0,0.13)]">
+        <Link href="/" className="absolute left-[calc(50%+1px)] top-[5px] z-30 -translate-x-1/2">
+          <Image
+            src="/logos/trilokini-header.png"
+            alt="Trilokini"
+            width={182}
+            height={139}
+            className="h-[139px] w-[182px] object-contain"
+            priority
+          />
+        </Link>
+
+        <div className="relative z-10 h-[109px] bg-white shadow-[0px_1px_4px_0px_rgba(0,0,0,0.13)]">
           <div className="flex h-[78px] items-center justify-between px-[86px] text-[12px] font-semibold text-black">
             <div className="flex items-center gap-[52px]">
               <div className="flex items-center gap-[1px]">
@@ -59,17 +70,6 @@ export function DesktopHeader() {
                 <button type="button" onClick={() => openAuth("login")}>ACCOUNT</button>
               )}
             </div>
-
-            <Link href="/" className="absolute left-1/2 top-[17px] -translate-x-1/2">
-              <Image
-                src="/logos/trilokini-header.png"
-                alt="Trilokini"
-                width={220}
-                height={44}
-                className="h-[44px] w-[220px] object-contain"
-                priority
-              />
-            </Link>
 
             <div className="relative z-20 flex items-center gap-[20px]">
               <button type="button" onClick={() => setSearchOpen(true)} className="inline-flex size-[28px] items-center justify-center" aria-label="Search">

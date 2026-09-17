@@ -59,7 +59,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
   return <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-5 lg:gap-x-4">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div>;
 }
 
-export function ProductCarousel({ products, title, hideFavorite }: { products: Product[]; title?: string; hideFavorite?: boolean }) {
+export function ProductCarousel({ products, title, hideFavorite, homeDesktop }: { products: Product[]; title?: string; hideFavorite?: boolean; homeDesktop?: boolean }) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {
@@ -84,13 +84,13 @@ export function ProductCarousel({ products, title, hideFavorite }: { products: P
           </button>
         </div>
       ) : null}
-      <div className="relative group px-[5px] lg:px-12">
+      <div className={`relative group px-[5px] ${homeDesktop ? "lg:px-[75px]" : "lg:px-12"}`}>
         <button onClick={scrollLeft} className="absolute left-3 top-[35%] z-10 hidden -translate-y-1/2 p-2 lg:block hover:bg-gray-100 rounded-full transition-colors bg-white/80 shadow-sm border border-gray-100">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <div ref={scrollRef} className="flex snap-x snap-mandatory gap-3 lg:gap-4 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {products.map((product) => (
-            <div key={product.id} className="w-[140px] min-w-[140px] snap-start lg:w-[calc(20%-13px)] lg:min-w-[calc(20%-13px)]">
+            <div key={product.id} className={`w-[140px] min-w-[140px] snap-start ${homeDesktop ? "lg:w-[calc((100%-64px)/5)] lg:min-w-[calc((100%-64px)/5)]" : "lg:w-[calc(20%-13px)] lg:min-w-[calc(20%-13px)]"}`}>
               <ProductCard product={product} hideFavorite={hideFavorite} />
             </div>
           ))}
