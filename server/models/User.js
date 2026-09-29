@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   mobile: { type: String, trim: true, index: true },
   photoUrl: { type: String },
   provider: { type: String, enum: ['password', 'google', 'phone'], default: 'password' },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   agreeToTerms: { type: Boolean, default: false },
   emailUpdates: { type: Boolean, default: false },
   whatsappUpdates: { type: Boolean, default: false },

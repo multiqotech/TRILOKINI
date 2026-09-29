@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const collectionController = require('../controllers/collectionController');
+const { requireAdmin } = require('../middleware/auth');
 
 router.get('/active', collectionController.getActive);
 
 router.route('/')
   .get(collectionController.getAll)
-  .post(collectionController.create);
+  .post(requireAdmin, collectionController.create);
 
 router.route('/:id')
   .get(collectionController.getById)
-  .put(collectionController.update)
-  .delete(collectionController.deleteOne);
+  .put(requireAdmin, collectionController.update)
+  .delete(requireAdmin, collectionController.deleteOne);
 
 module.exports = router;

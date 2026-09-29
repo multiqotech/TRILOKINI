@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const heroBannerController = require('../controllers/heroBannerController');
+const { requireAdmin } = require('../middleware/auth');
 
 router.get('/active', heroBannerController.getActiveBanners);
-router.put('/reorder', heroBannerController.reorder);
+router.put('/reorder', requireAdmin, heroBannerController.reorder);
 
 router.route('/')
   .get(heroBannerController.getAll)
-  .post(heroBannerController.create);
+  .post(requireAdmin, heroBannerController.create);
 
 router.route('/:id')
   .get(heroBannerController.getById)
-  .put(heroBannerController.update)
-  .delete(heroBannerController.deleteOne);
+  .put(requireAdmin, heroBannerController.update)
+  .delete(requireAdmin, heroBannerController.deleteOne);
 
 module.exports = router;
