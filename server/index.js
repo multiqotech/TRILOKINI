@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001']
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'https://trilokini-75n4.vercel.app','https://trilokini.vercel.app']
 }));
 app.use(express.json());
 
